@@ -1,0 +1,1972 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة فك التشفير وإدارة المتجر | متجر ميم للإلكترونيات</title>
+
+    <!-- 100% Local Offline Stylesheet -->
+    <link rel="stylesheet" href="assets/css/app.css">
+
+    <!-- 100% Local Offline Tailwind Engine -->
+    <script src="assets/js/tailwind.min.js"></script>
+
+    <!-- 100% Local SVG Vector Icons -->
+    <script src="assets/js/icons.js"></script>
+
+    <!-- 100% Local Barcode & QR Code Engine -->
+    <script src="assets/js/jsqr.min.js"></script>
+    <script src="assets/js/jsbarcode.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ['Cairo', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        meem: {
+                            surface: '#F8FAFC',
+                            card: '#FFFFFF',
+                            cardHover: '#F1F5F9',
+                            border: '#E2E8F0',
+                            emerald: '#00B574',
+                            emeraldHover: '#009b63',
+                            teal: '#0891B2',
+                            tealHover: '#0e7490',
+                            blue: '#2563EB',
+                            blueHover: '#1d4ed8',
+                            purple: '#7C3AED',
+                            purpleHover: '#6a2fd3'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="min-h-screen flex flex-col bg-[#F8FAFC] text-slate-800 selection:bg-[#00B574] selection:text-white pb-6 theme-light">
+
+    <!-- =========================================================================
+         1. Admin Login Gate Screen (Protected Authentication)
+         ========================================================================= -->
+    <!-- =========================================================================
+         1. Admin Login Gate Screen (Protected Authentication with Live Diagnostic Log)
+         ========================================================================= -->
+    <div id="adminLoginGate" class="fixed inset-0 bg-[#0E1B2B] z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-[#132438] border border-[#1f3857] rounded-3xl max-w-lg w-full p-5 sm:p-7 shadow-2xl neon-glow-teal text-center space-y-4 my-auto">
+            <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-[#3B6FE0] to-[#00B574] p-0.5 mx-auto shadow-lg shadow-[#3B6FE0]/30">
+                <div class="w-full h-full bg-[#0E1B2B] rounded-[14px] flex items-center justify-center text-teal-300">
+                    <span data-icon="lock" data-size="26"></span>
+                </div>
+            </div>
+
+            <div>
+                <h2 class="text-xl sm:text-2xl font-black text-white">تسجيل دخول الإدارة</h2>
+                <p class="text-xs text-slate-400 mt-0.5">متجر ميم للإلكترونيات | بوابة التحكم وقاعدة بيانات MySQL</p>
+            </div>
+
+            <!-- Visual Alert Message Box -->
+            <div id="authAlertBox" class="hidden p-3 rounded-xl text-xs font-bold text-right transition-all"></div>
+
+            <form id="adminLoginForm" onsubmit="event.preventDefault(); handleAdminLogin(event); return false;" class="space-y-3.5 text-right">
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1.5 flex items-center justify-between">
+                        <span>كلمة مرور المدير:</span>
+                        <span class="text-[11px] text-slate-400 font-normal">الافتراضية: <code class="text-teal-300 font-bold bg-[#0E1B2B] px-1.5 py-0.5 rounded border border-[#1f3857]">admin123</code></span>
+                    </label>
+                    <div class="relative">
+                        <input 
+                            type="password" 
+                            id="adminLoginPasswordInput" 
+                            required
+                            placeholder="أدخل كلمة المرور (الافتراضية: admin123)" 
+                            class="w-full bg-[#0E1B2B] border border-[#1f3857] focus:border-[#00B574] rounded-xl py-2.5 px-3 pl-10 text-sm text-white placeholder-slate-500 focus:outline-none transition"
+                        >
+                        <button 
+                            type="button" 
+                            onclick="togglePasswordVisibility('adminLoginPasswordInput')" 
+                            class="absolute left-3 top-2.5 text-slate-400 hover:text-white"
+                            title="إظهار / إخفاء كلمة المرور"
+                        >
+                            <span data-icon="eye" data-size="16"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between text-xs text-slate-400">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" id="adminRememberMe" class="rounded bg-[#0E1B2B] border-[#1f3857] text-[#00B574] focus:ring-0">
+                        <span>تذكر تسجيلي على هذا الجهاز</span>
+                    </label>
+                    <button 
+                        type="button" 
+                        onclick="fillDefaultAdminPassword()"
+                        class="text-[11px] text-[#00B574] hover:underline font-bold cursor-pointer"
+                    >
+                        ⚡ تجربة بـ (admin123)
+                    </button>
+                </div>
+
+                <button 
+                    type="submit" 
+                    id="adminLoginSubmitBtn"
+                    onclick="handleAdminLogin(event)"
+                    class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-[#00B574] to-[#1DA1B9] hover:from-[#009b63] hover:to-[#17879b] text-white font-black text-sm shadow-lg shadow-[#00B574]/25 flex items-center justify-center gap-2 transition active:scale-95 cursor-pointer"
+                >
+                    <span data-icon="unlock" data-size="16"></span>
+                    <span id="adminLoginBtnText">دخول إلى لوحة التحكم</span>
+                </button>
+            </form>
+
+            <!-- Live Diagnostic Authentication & DB Log Console -->
+            <div class="text-right border border-[#1f3857] rounded-2xl bg-[#09131F] p-3 text-xs space-y-2">
+                <div class="flex items-center justify-between border-b border-[#1f3857]/70 pb-2">
+                    <div class="flex items-center gap-1.5 font-bold text-slate-300">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span>سجل تشخيص الدخول وقاعدة البيانات (Live Log)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button 
+                            type="button" 
+                            onclick="runAuthDiagnosticPing()" 
+                            class="text-[10px] bg-[#132438] hover:bg-[#182e47] text-teal-300 border border-[#1f3857] px-2 py-0.5 rounded transition cursor-pointer"
+                            title="فحص الاتصال مع خادم WAMP وقاعدة البيانات"
+                        >
+                            فحص الاتصال 🔄
+                        </button>
+                        <button 
+                            type="button" 
+                            onclick="clearAuthLog()" 
+                            class="text-[10px] text-slate-500 hover:text-slate-300 cursor-pointer"
+                            title="مسح السجل"
+                        >
+                            مسح
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Log Output Scrollbox -->
+                <div 
+                    id="authLogConsole" 
+                    class="font-mono text-[11px] text-left ltr bg-[#060D15] p-2.5 rounded-xl max-h-36 overflow-y-auto space-y-1 select-text border border-[#172b43]"
+                >
+                    <div class="text-slate-500">// Diagnostic log initialized. Ready for login...</div>
+                </div>
+
+                <!-- Footer Tools inside Log -->
+                <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1">
+                    <span id="authEnvInfo" class="truncate font-mono">البيئة: جاري الفحص...</span>
+                    <button 
+                        type="button" 
+                        onclick="resetAdminPasswordEmergency()" 
+                        class="text-rose-400 hover:text-rose-300 text-[10px] underline cursor-pointer"
+                        title="إعادة تعيين كلمة المرور في MySQL والمتصفح إلى admin123"
+                    >
+                        استعادة كلمة المرور الافتراضية
+                    </button>
+                </div>
+            </div>
+
+            <div class="pt-1">
+                <a href="index.html" class="text-xs text-slate-400 hover:text-teal-300 underline">
+                    العودة إلى واجهة المتجر الرئيسية
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         2. Authenticated Admin Dashboard Layout
+         ========================================================================= -->
+    <div id="adminDashboardApp" class="hidden flex-1 flex flex-col">
+
+        <!-- Top Admin Header Bar -->
+        <header id="adminNavbar" class="glass-panel border-b border-[#1f3857] sticky top-0 z-40">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-2.5">
+                    <a href="admin.html" class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-[#7C3AED] to-[#00B574] p-0.5 flex items-center justify-center">
+                        <div class="w-full h-full bg-[#0E1B2B] rounded-[14px] flex items-center justify-center text-[#00B574]">
+                            <span data-icon="qrcode" data-size="20"></span>
+                        </div>
+                    </a>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h1 class="text-sm sm:text-lg font-black text-white">إدارة متجر ميم</h1>
+                            <span class="text-[9px] bg-[#7C3AED]/20 text-purple-300 px-2 py-0.5 rounded-full font-bold border border-[#7C3AED]/30">لوحة الإدارة</span>
+                        </div>
+                        <p class="text-[10px] sm:text-xs text-slate-400">إدارة المنتجات، السلايدر، فك التشفير، والواتساب</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <!-- MySQL Database Connectivity Status Badge -->
+                    <div id="dbStatusBadge" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[11px] font-black border transition-all bg-slate-100 dark:bg-[#132438] text-slate-400 border-slate-300 dark:border-[#1f3857]">
+                        <span id="dbStatusDot" class="w-2 h-2 rounded-full bg-slate-400"></span>
+                        <span id="dbStatusText">جاري فحص قاعدة البيانات...</span>
+                    </div>
+
+                    <!-- Theme Switcher Slider -->
+                    <div class="flex items-center gap-1.5" title="تبديل المظهر النهاري / الليلي">
+                        <div 
+                            onclick="handleToggleTheme()" 
+                            class="theme-switch-slider" 
+                            id="adminThemeSwitchBtn"
+                        >
+                            <div class="theme-switch-handle" id="adminThemeSwitchHandle">
+                                <span data-icon="moon" data-size="12" id="adminThemeSwitchIcon"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button 
+                        onclick="openSettingsModal()" 
+                        class="px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-[#132438] hover:bg-[#182e47] text-teal-300 border border-[#1f3857] text-xs font-bold transition flex items-center gap-1.5"
+                    >
+                        <span data-icon="settings" data-size="14"></span>
+                        <span class="hidden sm:inline">إعدادات الأمان</span>
+                    </button>
+
+                    <a 
+                        href="index.html" 
+                        target="_blank"
+                        class="px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-[#3B6FE0] hover:bg-[#2b5dc9] text-white text-xs font-bold transition flex items-center gap-1.5"
+                    >
+                        <span data-icon="home" data-size="14"></span>
+                        <span class="hidden sm:inline">عرض المتجر</span>
+                    </a>
+
+                    <button 
+                        onclick="handleAdminLogout()" 
+                        title="تسجيل الخروج"
+                        class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#0E1B2B] hover:bg-rose-950 text-rose-400 hover:text-white border border-[#1f3857] flex items-center justify-center transition"
+                    >
+                        <span data-icon="logout" data-size="15"></span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Dashboard Content -->
+        <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-6 space-y-6">
+
+            <!-- Section 1: Customer WhatsApp Routing Center -->
+            <section class="glass-panel rounded-3xl p-4 sm:p-6 border border-[#00B574]/40 neon-glow-emerald">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div class="flex items-start gap-3">
+                        <div class="w-12 h-12 rounded-2xl bg-[#00B574]/20 border border-[#00B574]/40 text-[#00B574] flex items-center justify-center shrink-0">
+                            <span data-icon="whatsapp" data-size="24"></span>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-base sm:text-lg font-black text-white">رقم واتساب المتجر لاستقبال طلبات العملاء</h3>
+                                <span class="px-2 py-0.5 rounded-full bg-[#00B574]/20 text-[#00B574] text-[10px] font-bold">موجه تلقائي مباشر</span>
+                            </div>
+                            <p class="text-xs text-slate-300 mt-1">
+                                هذا الرقم هو الذي يتم تحويل كافة الزبائن إليه مباشرة عند الضغط على زر "إرسال لواتساب المتجر" في واجهة المتجر الرئيسية.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Direct Quick Input & Test Link -->
+                    <div class="flex flex-wrap sm:flex-nowrap items-center gap-2 bg-[#0E1B2B] p-2 rounded-2xl border border-[#1f3857]">
+                        <div class="flex items-center gap-1.5 px-2">
+                            <span class="text-xs text-slate-400 font-bold" dir="ltr">+</span>
+                            <input 
+                                type="text" 
+                                id="adminWhatsappDirectInput" 
+                                dir="ltr"
+                                placeholder="966500000000"
+                                class="bg-transparent text-sm font-mono font-bold text-[#00B574] focus:outline-none w-36"
+                            >
+                        </div>
+                        <button 
+                            onclick="saveDirectWhatsAppNumber()" 
+                            class="px-3 py-1.5 rounded-xl bg-[#00B574] hover:bg-[#009b63] text-white text-xs font-bold transition flex items-center gap-1"
+                        >
+                            <span data-icon="check" data-size="12"></span>
+                            <span>حفظ الرقم</span>
+                        </button>
+                        <button 
+                            onclick="testCustomerWhatsAppRedirect()" 
+                            class="px-3 py-1.5 rounded-xl bg-[#132438] hover:bg-[#182e47] text-teal-300 border border-[#1f3857] text-xs font-bold transition flex items-center gap-1"
+                        >
+                            <span data-icon="externalLink" data-size="12"></span>
+                            <span>تجربة الرابط</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Navigation Tabs: Products / Carousel / Decoder / Orders -->
+            <div class="flex items-center gap-2 border-b border-[#1f3857] pb-3 overflow-x-auto no-scrollbar">
+                <button 
+                    id="dashTabBtnProducts" 
+                    onclick="switchDashboardTab('products')" 
+                    class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#3B6FE0] text-white shadow flex items-center gap-2 transition whitespace-nowrap"
+                >
+                    <span data-icon="box" data-size="15"></span>
+                    <span>المنتجات والمخزون (<span id="tabProductCountBadge">0</span>)</span>
+                </button>
+
+                <button 
+                    id="dashTabBtnCarousel" 
+                    onclick="switchDashboardTab('carousel')" 
+                    class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#132438] text-slate-300 hover:text-white border border-[#1f3857] flex items-center gap-2 transition whitespace-nowrap"
+                >
+                    <span data-icon="layers" data-size="15"></span>
+                    <span>السلايدر الإعلاني (<span id="tabCarouselCountBadge">0</span>)</span>
+                </button>
+
+                <button 
+                    id="dashTabBtnDecoder" 
+                    onclick="switchDashboardTab('decoder')" 
+                    class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#132438] text-slate-300 hover:text-white border border-[#1f3857] flex items-center gap-2 transition whitespace-nowrap"
+                >
+                    <span data-icon="qrcode" data-size="15"></span>
+                    <span>فك التشفير والكاميرا</span>
+                </button>
+
+                <button 
+                    id="dashTabBtnOrders" 
+                    onclick="switchDashboardTab('orders')" 
+                    class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#132438] text-slate-300 hover:text-white border border-[#1f3857] flex items-center gap-2 transition whitespace-nowrap"
+                >
+                    <span data-icon="fileText" data-size="15"></span>
+                    <span>سجل المبيعات</span>
+                </button>
+            </div>
+
+            <!-- =========================================================================
+                 TAB A: Product Catalog Management (Add / Edit / Delete Products)
+                 ========================================================================= -->
+            <section id="adminProductsSection" class="space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#132438] p-4 rounded-2xl border border-[#1f3857]">
+                    <div>
+                        <h3 class="text-base font-black text-white flex items-center gap-2">
+                            <span data-icon="box" data-size="18" class="text-[#3B6FE0]"></span>
+                            <span>كتالوج القطع والمكونات الإلكترونية</span>
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-0.5">أضف قطعاً جديدة مع دعم رفع صور متعددة، عدل الأسعار والمواصفات وستظهر فوراً بالمتجر.</p>
+                    </div>
+
+                    <button 
+                        onclick="openAddProductModal()" 
+                        class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#00B574] to-[#1DA1B9] hover:from-[#009b63] hover:to-[#17879b] text-white font-bold text-xs sm:text-sm shadow-md shadow-[#00B574]/25 flex items-center justify-center gap-2 transition"
+                    >
+                        <span data-icon="plus" data-size="14"></span>
+                        <span>إضافة قطعة إلكترونية جديدة</span>
+                    </button>
+                </div>
+
+                <!-- Product Table -->
+                <div class="overflow-x-auto rounded-2xl border border-[#1f3857] bg-[#0E1B2B]">
+                    <table class="w-full text-right text-xs">
+                        <thead class="bg-[#132438] text-slate-400 border-b border-[#1f3857]">
+                            <tr>
+                                <th class="p-3">الصور</th>
+                                <th class="p-3">كود القطعة</th>
+                                <th class="p-3">اسم القطعة والمتحكم</th>
+                                <th class="p-3">التصنيف</th>
+                                <th class="p-3 text-left">السعر (ر.س)</th>
+                                <th class="p-3 text-center">المخزون</th>
+                                <th class="p-3 text-center">إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminProductsTableBody" class="divide-y divide-[#1f3857]/60"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- =========================================================================
+                 TAB B: Hero Carousel Management
+                 ========================================================================= -->
+            <section id="adminCarouselSection" class="hidden space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#132438] p-4 rounded-2xl border border-[#1f3857]">
+                    <div>
+                        <h3 class="text-base font-black text-white flex items-center gap-2">
+                            <span data-icon="layers" data-size="18" class="text-[#00B574]"></span>
+                            <span>إدارة السلايدر الإعلاني الرئيسي (Hero Carousel)</span>
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-0.5">تحكم في الشرائح الإعلانية التي تتنقل تلقائياً كل 5 ثوانٍ في واجهة المتجر الرئيسية.</p>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <button 
+                            onclick="resetToDefaultCarouselSlides()" 
+                            class="px-3 py-2 rounded-xl bg-[#0E1B2B] text-slate-400 hover:text-white border border-[#1f3857] text-xs font-bold transition"
+                        >
+                            استعادة الافتراضي
+                        </button>
+                        <button 
+                            onclick="openAddCarouselSlideModal()" 
+                            class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#00B574] to-[#1DA1B9] hover:from-[#009b63] hover:to-[#17879b] text-white font-bold text-xs sm:text-sm shadow flex items-center gap-1.5 transition"
+                        >
+                            <span data-icon="plus" data-size="14"></span>
+                            <span>إضافة شريحة جديدة</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Carousel Slides Cards List -->
+                <div id="adminCarouselCardsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Injected by JS -->
+                </div>
+            </section>
+
+            <!-- =========================================================================
+                 TAB C: QR Code Decryption & Live Camera Scanner
+                 ========================================================================= -->
+            <section id="adminDecoderSection" class="hidden space-y-6">
+                <div class="glass-panel rounded-3xl p-5 sm:p-7 border border-[#1f3857]">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 pb-3 border-b border-[#1f3857]">
+                        <div>
+                            <h3 class="text-base sm:text-lg font-black text-white flex items-center gap-2">
+                                <span data-icon="unlock" data-size="18" class="text-[#00B574]"></span>
+                                <span>قراءة وفك تشفير باركود طلب العميل</span>
+                            </h3>
+                            <p class="text-xs text-slate-400">اختر طريقة المسح (رفع صورة الباركود من واتساب، الكاميرا المباشرة، أو لصق النص).</p>
+                        </div>
+
+                        <!-- Scanner Method Selector -->
+                        <div class="flex items-center gap-1.5 bg-[#0E1B2B] p-1 rounded-2xl border border-[#1f3857]">
+                            <button id="tabScanImage" onclick="switchScanMethod('image')" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-[#1DA1B9] text-white">رفع صورة</button>
+                            <button id="tabScanCamera" onclick="switchScanMethod('camera')" class="px-3 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white">الكاميرا</button>
+                            <button id="tabScanText" onclick="switchScanMethod('text')" class="px-3 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white">لصق نص</button>
+                        </div>
+                    </div>
+
+                    <!-- Scan Mode 1: Image Drag and Drop -->
+                    <div id="scanModeImage" class="space-y-3">
+                        <div 
+                            id="dropZone" 
+                            ondragover="handleDragOver(event)" 
+                            ondragleave="handleDragLeave(event)" 
+                            ondrop="handleFileDrop(event)"
+                            class="border-2 border-dashed border-[#1f3857] hover:border-[#00B574] rounded-2xl p-8 text-center bg-[#0E1B2B]/60 transition cursor-pointer flex flex-col items-center justify-center relative"
+                        >
+                            <input type="file" id="qrFileInput" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer" onchange="handleFileSelect(event)">
+                            <span data-icon="upload" data-size="36" class="text-[#00B574] mb-2"></span>
+                            <h4 class="font-bold text-white text-sm">اسحب وأفلت صورة تذكرة الباركود هنا</h4>
+                            <p class="text-xs text-slate-400 mt-1">أو اضغط لاختيار الصورة المرسلة عبر الواتساب</p>
+                        </div>
+                    </div>
+
+                    <!-- Scan Mode 2: Live Camera -->
+                    <div id="scanModeCamera" class="hidden flex flex-col items-center">
+                        <div class="relative w-full max-w-sm h-64 bg-[#0E1B2B] rounded-2xl overflow-hidden border border-[#1f3857] flex items-center justify-center">
+                            <video id="cameraVideo" playsinline class="w-full h-full object-cover hidden"></video>
+                            <canvas id="cameraCanvas" class="hidden"></canvas>
+                            <div id="cameraLaser" class="scanner-laser hidden"></div>
+                            <div id="cameraPlaceholder" class="text-center p-4">
+                                <span data-icon="camera" data-size="32" class="text-[#3B6FE0] mb-2 mx-auto block"></span>
+                                <p class="text-xs text-slate-300">اضغط على زر تشغيل الكاميرا لمسح باركود هاتف العميل</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-2 mt-3">
+                            <button id="startCamBtn" onclick="startCameraScanner()" class="px-4 py-2 rounded-xl bg-[#00B574] hover:bg-[#009b63] text-white text-xs font-bold flex items-center gap-1.5">
+                                <span data-icon="camera" data-size="14"></span> تشغيل الكاميرا
+                            </button>
+                            <button id="stopCamBtn" onclick="stopCameraScanner()" class="px-4 py-2 rounded-xl bg-[#0E1B2B] text-slate-300 border border-[#1f3857] text-xs font-bold hidden">
+                                إيقاف
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Scan Mode 3: Text Paste -->
+                    <div id="scanModeText" class="hidden space-y-3">
+                        <textarea 
+                            id="cipherTextInput" 
+                            rows="3" 
+                            dir="ltr"
+                            placeholder="MEEM-ENC::MEEM-XXXXXX::..." 
+                            class="w-full bg-[#0E1B2B] border border-[#1f3857] focus:border-[#00B574] rounded-2xl p-3 text-xs font-mono text-teal-300 focus:outline-none"
+                        ></textarea>
+                        <div class="flex justify-end">
+                            <button onclick="decodeFromTextInput()" class="px-5 py-2 rounded-xl bg-gradient-to-r from-[#00B574] to-[#1DA1B9] text-white font-bold text-xs flex items-center gap-1.5">
+                                <span data-icon="unlock" data-size="14"></span> فك التشفير وعرض الطلب
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Decrypted Result Card -->
+                <div id="decryptedOrderSection" class="hidden glass-panel rounded-3xl p-5 sm:p-7 border border-[#00B574]/40 neon-glow-emerald space-y-5">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#1f3857]">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 id="decOrderId" class="text-lg font-black text-white font-mono">MEEM-000000</h3>
+                                <span class="px-2 py-0.5 rounded-full bg-[#00B574]/20 text-[#00B574] text-xs font-bold">باركود أصلي موثق</span>
+                            </div>
+                            <p id="decOrderTimestamp" class="text-xs text-slate-400 font-mono mt-0.5"></p>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <label class="text-xs font-bold text-slate-400">حالة الطلب:</label>
+                            <select id="orderStatusSelect" onchange="updateCurrentOrderStatus(this.value)" class="bg-[#0E1B2B] border border-[#1f3857] text-xs font-bold rounded-xl px-3 py-1.5 text-white">
+                                <option value="pending_payment" class="text-amber-400">⏳ في انتظار الدفع</option>
+                                <option value="payment_confirmed" class="text-[#00B574]">✅ تم تأكيد الدفع</option>
+                                <option value="shipping" class="text-[#3B6FE0]">📦 جاري الشحن</option>
+                                <option value="completed" class="text-teal-300">🎉 مكتمل</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                        <div class="bg-[#0E1B2B] p-3.5 rounded-2xl border border-[#1f3857] space-y-2">
+                            <h4 class="font-bold text-[#1DA1B9] text-xs flex items-center gap-1.5">
+                                <span data-icon="user" data-size="13"></span> بيانات العميل:
+                            </h4>
+                            <div class="flex justify-between"><span class="text-slate-400">الاسم:</span> <strong id="decCustName" class="text-white">-</strong></div>
+                            <div class="flex justify-between items-center"><span class="text-slate-400">الهاتف:</span> <strong id="decCustPhone" class="text-[#00B574] font-mono" dir="ltr">-</strong></div>
+                            <div class="flex justify-between"><span class="text-slate-400">العنوان:</span> <strong id="decCustAddress" class="text-white text-right max-w-xs">-</strong></div>
+                        </div>
+
+                        <div class="bg-[#0E1B2B] p-3.5 rounded-2xl border border-[#1f3857] flex flex-col justify-between">
+                            <div>
+                                <h4 class="font-bold text-[#3B6FE0] text-xs flex items-center gap-1.5 mb-1.5">
+                                    <span data-icon="gps" data-size="13"></span> موقع التوصيل:
+                                </h4>
+                                <p class="text-slate-400 text-[11px]">انقر لعرض إحداثيات ومسار مندوب التوصيل على خرائط جوجل:</p>
+                            </div>
+                            <a id="decGpsMapBtn" href="#" target="_blank" class="w-full py-2 px-3 rounded-xl bg-[#3B6FE0]/20 hover:bg-[#3B6FE0] text-white border border-[#3B6FE0]/40 font-bold text-xs flex items-center justify-center gap-1.5 transition mt-2">
+                                <span data-icon="externalLink" data-size="12"></span> عرض على خرائط Google
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto rounded-2xl border border-[#1f3857] bg-[#0E1B2B]">
+                        <table class="w-full text-right text-xs">
+                            <thead class="bg-[#132438] text-slate-300 border-b border-[#1f3857]">
+                                <tr>
+                                    <th class="p-3">الكود</th>
+                                    <th class="p-3">القطعة</th>
+                                    <th class="p-3 text-center">الكمية</th>
+                                    <th class="p-3 text-left">سعر الوحدة</th>
+                                    <th class="p-3 text-left">المجموع</th>
+                                </tr>
+                            </thead>
+                            <tbody id="decItemsTableBody" class="divide-y divide-[#1f3857]/60"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-[#1f3857]">
+                        <div>
+                            <span class="text-xs text-slate-400">إجمالي الفاتورة المعتمدة:</span>
+                            <div id="decOrderTotalAmount" class="text-xl font-black text-[#00B574]">0 ر.س</div>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <button onclick="saveDecryptedOrderToHistory()" class="px-3 py-2 rounded-xl bg-[#0E1B2B] text-teal-300 border border-[#1f3857] font-bold text-xs flex items-center gap-1">
+                                <span data-icon="check" data-size="12"></span> حفظ بالسجلات
+                            </button>
+                            <button onclick="printA4Invoice()" class="px-3 py-2 rounded-xl bg-[#3B6FE0] text-white font-bold text-xs flex items-center gap-1">
+                                <span data-icon="print" data-size="12"></span> طباعة فاتورة A4
+                            </button>
+                            <button onclick="sendCustomerConfirmationWhatsApp()" class="px-3.5 py-2 rounded-xl bg-[#00B574] text-white font-bold text-xs flex items-center gap-1">
+                                <span data-icon="whatsapp" data-size="14"></span> إشعار العميل
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =========================================================================
+                 TAB D: Saved Orders History
+                 ========================================================================= -->
+            <section id="adminOrdersSection" class="hidden space-y-4">
+                <div class="flex items-center justify-between bg-[#132438] p-4 rounded-2xl border border-[#1f3857]">
+                    <h3 class="text-base font-black text-white flex items-center gap-2">
+                        <span data-icon="fileText" data-size="18" class="text-teal-300"></span>
+                        <span>سجل المبيعات والطلبات المخزنة</span>
+                    </h3>
+                    <button onclick="exportOrdersCSV()" class="px-3 py-1.5 rounded-xl bg-[#0E1B2B] hover:bg-[#182e47] text-slate-300 text-xs font-bold border border-[#1f3857] flex items-center gap-1">
+                        <span data-icon="download" data-size="12"></span> تصدير CSV
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto rounded-2xl border border-[#1f3857] bg-[#0E1B2B]">
+                    <table class="w-full text-right text-xs">
+                        <thead class="bg-[#132438] text-slate-400 border-b border-[#1f3857]">
+                            <tr>
+                                <th class="p-3">رقم الطلب</th>
+                                <th class="p-3">التاريخ</th>
+                                <th class="p-3">العميل</th>
+                                <th class="p-3">الهاتف</th>
+                                <th class="p-3 text-left">الإجمالي (ر.س)</th>
+                                <th class="p-3 text-center">الحالة</th>
+                                <th class="p-3 text-center">إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody" class="divide-y divide-[#1f3857]/60"></tbody>
+                    </table>
+                </div>
+                <div id="emptyHistoryState" class="hidden text-center py-8 text-xs text-slate-500">لا توجد طلبات محفوظة حالياً</div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- =========================================================================
+         Modal: Add / Edit Product Modal (Supports Multiple Images)
+         ========================================================================= -->
+    <div id="productEditModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-[#132438] border border-[#1f3857] rounded-3xl max-w-xl w-full p-5 sm:p-7 shadow-2xl relative my-6">
+            <button onclick="closeProductEditModal()" class="absolute top-4 left-4 w-8 h-8 rounded-xl bg-[#0E1B2B] text-slate-300 flex items-center justify-center border border-[#1f3857]">
+                <span data-icon="close" data-size="14"></span>
+            </button>
+
+            <h3 id="productModalHeading" class="text-base sm:text-lg font-black text-white mb-4 flex items-center gap-2">
+                <span data-icon="plus" data-size="18" class="text-[#00B574]"></span>
+                <span>إضافة قطعة إلكترونية جديدة</span>
+            </h3>
+
+            <form onsubmit="handleSaveProductForm(event)" class="space-y-3.5 text-xs">
+                <input type="hidden" id="prodFormId">
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-300 mb-1">اسم القطعة والموديل <span class="text-rose-400">*</span></label>
+                        <input type="text" id="prodFormName" required placeholder="مثال: شريحة STM32 BluePill" class="w-full bg-[#0E1B2B] border border-[#1f3857] focus:border-[#00B574] rounded-xl p-2.5 text-white">
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-slate-300 mb-1">التصنيف <span class="text-rose-400">*</span></label>
+                        <select id="prodFormCategory" class="w-full bg-[#0E1B2B] border border-[#1f3857] rounded-xl p-2.5 text-white">
+                            <option value="microcontrollers">المتحكمات ولوحات التطوير</option>
+                            <option value="sensors">الحساسات والمستشعرات</option>
+                            <option value="actuators_power">المحركات ومغذيات الطاقة</option>
+                            <option value="tools_prototyping">معدات القياس واللحام</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-300 mb-1">السعر (ر.س) <span class="text-rose-400">*</span></label>
+                        <input type="number" id="prodFormPrice" required min="1" step="0.5" placeholder="45" class="w-full bg-[#0E1B2B] border border-[#1f3857] rounded-xl p-2.5 text-white font-mono">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-300 mb-1">المخزون (قطعة)</label>
+                        <input type="number" id="prodFormStock" min="1" value="20" class="w-full bg-[#0E1B2B] border border-[#1f3857] rounded-xl p-2.5 text-white font-mono">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-300 mb-1">شارة التميز</label>
+                        <input type="text" id="prodFormBadge" placeholder="الأكثر طلباً" value="جديد" class="w-full bg-[#0E1B2B] border border-[#1f3857] rounded-xl p-2.5 text-white">
+                    </div>
+                </div>
+
+                <!-- Multiple Images Uploader & Gallery Preview -->
+                <div>
+                    <label class="block font-bold text-slate-300 mb-1">
+                        صور القطعة (يدعم رفع صور متعددة للقطعة الواحدة) <span class="text-teal-300">*</span>
+                    </label>
+                    <div class="space-y-2">
+                        <input 
+                            type="file" 
+                            id="prodFormImageFiles" 
+                            accept="image/*" 
+                            multiple 
+                            onchange="handleMultipleProductImages(event)" 
+                            class="w-full text-xs text-slate-400 file:mr-2 file:py-1.5 file:px-3.5 file:rounded-xl file:border-0 file:bg-[#182e47] file:text-teal-300 file:font-bold cursor-pointer"
+                        >
+                        <!-- Gallery Preview Strip with delete button on each thumbnail -->
+                        <div id="prodFormGalleryPreview" class="flex flex-wrap gap-2 pt-1 min-h-[50px] p-2 bg-[#0E1B2B] rounded-xl border border-[#1f3857]">
+                            <!-- Injected dynamically via JS -->
+                        </div>
+                        <p class="text-[10px] text-slate-400">يمكنك تحديد عدة صور دفعة واحدة أو رفع صور إضافية لألبوم القطعة.</p>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-300 mb-1">وصف موجز (يظهر في البطاقة)</label>
+                    <input type="text" id="prodFormShortDesc" placeholder="نبذة سريعة عن القطعة واستخدامها..." class="w-full bg-[#0E1B2B] border border-[#1f3857] rounded-xl p-2.5 text-white">
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-300 mb-1">وصف فني تفصيلي</label>
+                    <textarea id="prodFormFullDesc" rows="2" placeholder="المعالج، التردد، الميزات..." class="w-full bg-[#0E1B2B] border border-[#1f3857] rounded-xl p-2.5 text-white resize-none"></textarea>
+                </div>
+
+                <div class="pt-2 flex justify-end gap-2">
+                    <button type="button" onclick="closeProductEditModal()" class="px-4 py-2 rounded-xl bg-[#0E1B2B] text-slate-400 hover:text-white">إلغاء</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-[#00B574] hover:bg-[#009b63] text-white font-bold">حفظ ونشر القطعة</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         Modal: Add / Edit Carousel Slide Modal
+         ========================================================================= -->
+    <div id="carouselSlideModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-[#132438] border border-[#1f3857] rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl relative my-6">
+            <button onclick="closeCarouselSlideModal()" class="absolute top-4 left-4 w-8 h-8 rounded-xl bg-[#0E1B2B] text-slate-300 flex items-center justify-center border border-[#1f3857]">
+                <span data-icon="close" data-size="14"></span>
+            </button>
+
+            <h3 id="carouselModalHeading" class="text-base font-black text-white mb-3 flex items-center gap-2">
+                <span data-icon="layers" data-size="16" class="text-[#00B574]"></span>
+                <span>إضافة شريحة للسلايدر الإعلاني</span>
+            </h3>
+
+            <form onsubmit="handleSaveCarouselSlide(event)" class="space-y-3 text-xs">
+                <input type="hidden" id="slideFormId">
+
+                <div>
+                    <label class="block font-bold text-slate-300 mb-1">عنوان الشريحة الرئيسي <span class="text-rose-400">*</span></label>
+                    <input type="text" id="slideFormTitle" required placeholder="مثال: لوحات أردوينو الأصلية 2026" class="w-full bg-[#0E1B2B] border border-[#1f3857] rounded-xl p-2.5 text-white">
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-300 mb-1">الوصف الترويجي للشريحة <span class="text-rose-400">*</span></label>
+                    <textarea id="slideFormSubtitle" required rows="2" placeholder="تفاصيل العرض الترويجي..." class="w-full bg-[#0E1B2B] border border-[#1f3857] rounded-xl p-2.5 text-white resize-none"></textarea>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2.5">
+                    <div>
+                        <label class="block font-bold text-slate-300 mb-1">شارة الشريحة (Badge)</label>
+                        <input type="text" id="slideFormBadge" placeholder="وصل حديثاً" value="عرض مميز" class="w-full bg-[#0E1B2B] border border-[#1f3857] rounded-xl p-2.5 text-white">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-300 mb-1">لون الشارة</label>
+                        <select id="slideFormBadgeColor" class="w-full bg-[#0E1B2B] border border-[#1f3857] rounded-xl p-2.5 text-white">
+                            <option value="#00B574">أخضر زمردي (#00B574)</option>
+                            <option value="#1DA1B9">سماوي سيبراني (#1DA1B9)</option>
+                            <option value="#3B6FE0">أزرق ملكي (#3B6FE0)</option>
+                            <option value="#7C3AED">بنفسجي إلكتروني (#7C3AED)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2.5">
+                    <div>
+                        <label class="block font-bold text-slate-300 mb-1">نص الزر</label>
+                        <input type="text" id="slideFormButtonText" placeholder="تصفح العرض" value="تصفح الآن" class="w-full bg-[#0E1B2B] border border-[#1f3857] rounded-xl p-2.5 text-white">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-300 mb-1">التصنيف المستهدف</label>
+                        <select id="slideFormButtonCategory" class="w-full bg-[#0E1B2B] border border-[#1f3857] rounded-xl p-2.5 text-white">
+                            <option value="all">جميع القطع</option>
+                            <option value="microcontrollers">المتحكمات ولوحات التطوير</option>
+                            <option value="sensors">الحساسات والمستشعرات</option>
+                            <option value="actuators_power">المحركات ومغذيات الطاقة</option>
+                            <option value="tools_prototyping">معدات القياس واللحام</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">صورة القطعة / المكون (Foreground Image)</label>
+                    <div class="flex items-center gap-2">
+                        <input type="file" id="slideFormImageFile" accept="image/*" onchange="previewSlideImage(event)" class="text-xs text-slate-500 dark:text-slate-400 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:bg-slate-100 dark:file:bg-[#182e47] file:text-teal-600 dark:file:text-teal-300 file:font-bold">
+                        <img id="slideFormImagePreview" src="assets/images/placeholder.svg" class="w-10 h-10 rounded-xl object-contain bg-slate-100 dark:bg-[#0E1B2B] p-1 border border-slate-300 dark:border-[#1f3857]">
+                    </div>
+                </div>
+
+                <div class="border-t border-slate-200 dark:border-[#1f3857] pt-2.5">
+                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1 flex items-center justify-between">
+                        <span>صورة خلفية الشريحة (Picture Background)</span>
+                        <span class="text-[10px] text-teal-600 dark:text-teal-300 font-normal">اختياري - رفع صورة مخصصة أو اختيار قالب</span>
+                    </label>
+
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-2">
+                            <input type="file" id="slideFormBgImageFile" accept="image/*" onchange="handleSlideBgImageUpload(event)" class="text-xs text-slate-500 dark:text-slate-400 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:bg-slate-100 dark:file:bg-[#182e47] file:text-teal-600 dark:file:text-teal-300 file:font-bold">
+                            <button type="button" onclick="clearSlideBgImage()" class="px-2.5 py-1.5 text-[11px] rounded-xl bg-slate-100 dark:bg-[#182e47] text-rose-500 hover:text-rose-600 font-bold shrink-0">
+                                إزالة الخلفية
+                            </button>
+                        </div>
+
+                        <!-- Background Presets Selector -->
+                        <div class="flex flex-wrap items-center gap-1.5 pt-0.5">
+                            <span class="text-[10px] text-slate-500 font-bold">قوالب خلفيات جاهزة:</span>
+                            <button type="button" onclick="setSlideBgPreset('assets/images/bg-circuit.svg')" class="px-2 py-0.5 rounded-lg text-[10px] bg-slate-100 dark:bg-[#182e47] hover:border-emerald-500 border border-slate-300 dark:border-[#1f3857] text-slate-700 dark:text-slate-300 transition">
+                                ⚡ دارات PCB
+                            </button>
+                            <button type="button" onclick="setSlideBgPreset('assets/images/bg-iot-grid.svg')" class="px-2 py-0.5 rounded-lg text-[10px] bg-slate-100 dark:bg-[#182e47] hover:border-emerald-500 border border-slate-300 dark:border-[#1f3857] text-slate-700 dark:text-slate-300 transition">
+                                📡 شبكة IoT
+                            </button>
+                            <button type="button" onclick="setSlideBgPreset('assets/images/bg-lab.svg')" class="px-2 py-0.5 rounded-lg text-[10px] bg-slate-100 dark:bg-[#182e47] hover:border-emerald-500 border border-slate-300 dark:border-[#1f3857] text-slate-700 dark:text-slate-300 transition">
+                                🔬 مختبر وبرمجة
+                            </button>
+                        </div>
+
+                        <!-- Background Picture Preview Banner -->
+                        <div id="slideFormBgPreviewContainer" class="relative h-14 rounded-xl overflow-hidden border border-slate-200 dark:border-[#1f3857] bg-slate-100 dark:bg-[#0E1B2B] flex items-center justify-center">
+                            <img id="slideFormBgPreviewImg" src="" class="w-full h-full object-cover hidden">
+                            <span id="slideFormBgPreviewPlaceholder" class="text-[11px] text-slate-400">لا توجد صورة خلفية (سيتم استخدام تدرج لوني افتراضي)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-2 flex justify-end gap-2">
+                    <button type="button" onclick="closeCarouselSlideModal()" class="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-[#0E1B2B] text-slate-700 dark:text-slate-300">إلغاء</button>
+                    <button type="submit" class="px-4 py-2 rounded-xl bg-[#00B574] hover:bg-[#009b63] text-white font-bold">حفظ الشريحة</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Settings (Change Password & Secret Key) -->
+    <div id="settingsModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-[#132438] border border-[#1f3857] rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
+            <button onclick="closeSettingsModal()" class="absolute top-4 left-4 w-8 h-8 rounded-xl bg-[#0E1B2B] text-slate-300 flex items-center justify-center border border-[#1f3857]">
+                <span data-icon="close" data-size="14"></span>
+            </button>
+
+            <h3 class="text-base font-black text-white mb-4 flex items-center gap-2">
+                <span data-icon="settings" data-size="16" class="text-teal-300"></span>
+                <span>إعدادات أمان لوحة الإدارة</span>
+            </h3>
+
+            <div class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-bold text-slate-300 mb-1">تغيير كلمة مرور المدير:</label>
+                    <input type="password" id="settingNewPasswordInput" placeholder="أدخل كلمة مرور جديدة" class="w-full bg-[#0E1B2B] border border-[#1f3857] rounded-xl p-2.5 text-white font-mono">
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-300 mb-1">مفتاح التشفير المشترك:</label>
+                    <input type="text" id="settingSecretKeyInput" dir="ltr" class="w-full bg-[#0E1B2B] border border-[#1f3857] rounded-xl p-2.5 text-teal-300 font-mono">
+                </div>
+
+                <div class="pt-2 flex justify-end gap-2">
+                    <button onclick="closeSettingsModal()" class="px-3.5 py-2 rounded-xl bg-[#0E1B2B] text-slate-400">إلغاء</button>
+                    <button onclick="saveAdminSecuritySettings()" class="px-4 py-2 rounded-xl bg-[#00B574] text-white font-bold">حفظ الإعدادات</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden A4 Printable Invoice Sheet -->
+    <div id="printInvoiceArea" class="hidden bg-white text-slate-900 p-8 max-w-4xl mx-auto font-sans">
+        <div class="flex justify-between items-start border-b-2 border-slate-900 pb-3 mb-4">
+            <div>
+                <h1 class="text-2xl font-black text-slate-900">متجر ميم للإلكترونيات والقطع الذكية</h1>
+                <p class="text-xs text-slate-600">فاتورة مبيعات وسند تسليم رسمي</p>
+                <p class="text-xs text-slate-600">رقم واتساب المتجر: <span id="printStorePhone" dir="ltr"></span></p>
+            </div>
+            <div class="text-left font-mono">
+                <div id="printOrderId" class="text-lg font-black text-slate-900">MEEM-000000</div>
+                <div id="printOrderDate" class="text-xs text-slate-500"></div>
+                <svg id="printBarcodeSvg" class="h-8 mt-1"></svg>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 bg-slate-50 p-3 rounded border border-slate-200 mb-4 text-xs">
+            <div>
+                <p class="text-slate-500">المستلم: <strong id="printCustName" class="text-slate-900"></strong></p>
+                <p class="text-slate-500 mt-1">الهاتف: <strong id="printCustPhone" class="text-slate-900" dir="ltr"></strong></p>
+            </div>
+            <div>
+                <p class="text-slate-500">العنوان: <strong id="printCustAddress" class="text-slate-900"></strong></p>
+                <p class="text-slate-500 mt-1">الحالة: <strong class="text-emerald-700">تم تأكيد الدفع الخارجي</strong></p>
+            </div>
+        </div>
+
+        <table class="w-full text-right text-xs border border-slate-300 mb-4">
+            <thead>
+                <tr class="bg-slate-100 text-slate-800 border-b border-slate-300">
+                    <th class="p-2">#</th>
+                    <th class="p-2">الكود</th>
+                    <th class="p-2">القطعة الإلكترونية</th>
+                    <th class="p-2 text-center">الكمية</th>
+                    <th class="p-2 text-left">السعر (ر.س)</th>
+                    <th class="p-2 text-left">الإجمالي (ر.س)</th>
+                </tr>
+            </thead>
+            <tbody id="printItemsTableBody" class="divide-y divide-slate-200"></tbody>
+        </table>
+
+        <div class="flex justify-between items-end border-t-2 border-slate-900 pt-3 text-xs">
+            <p class="text-slate-500">توقيع المستلم عند الاستلام: ____________________</p>
+            <div class="text-left">
+                <span class="text-slate-600 block">الإجمالي المعتمد:</span>
+                <span id="printTotalAmount" class="text-xl font-black text-slate-900">0 ر.س</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toastNotification" class="fixed bottom-5 right-5 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-[#132438] border border-[#1DA1B9]/50 text-white px-4 py-2.5 rounded-2xl shadow-2xl flex items-center gap-2.5">
+            <div id="toastIcon" class="w-7 h-7 rounded-xl bg-[#00B574]/20 text-[#00B574] flex items-center justify-center">
+                <span data-icon="check" data-size="14"></span>
+            </div>
+            <span id="toastMessage" class="text-xs font-bold">تمت العملية بنجاح</span>
+        </div>
+    </div>
+
+    <!-- Central Configuration -->
+    <script src="store-config.js"></script>
+
+    <!-- Admin Client Logic -->
+    <script>
+        let currentDecodedOrder = null;
+        let adminOrders = JSON.parse(localStorage.getItem('MEEM_ADMIN_ORDERS') || '[]');
+        let videoStream = null;
+        let cameraScanInterval = null;
+        let currentProductGalleryImages = [];
+        let currentSlideImage = '';
+        let currentSlideBgImage = '';
+
+        /* =========================================================================
+         * Theme Switcher in Admin
+         * ========================================================================= */
+        function handleToggleTheme() {
+            const next = toggleTheme();
+            updateAdminThemeUI(next);
+        }
+
+        function updateAdminThemeUI(theme) {
+            const isDark = theme === 'dark';
+            const iconEl = document.getElementById('adminThemeSwitchIcon');
+            if (iconEl) {
+                iconEl.setAttribute('data-icon', isDark ? 'moon' : 'sun');
+            }
+            const handleEl = document.getElementById('adminThemeSwitchHandle');
+            if (handleEl) {
+                handleEl.style.transform = isDark ? 'translateX(0px)' : 'translateX(-28px)';
+            }
+            renderAllIcons();
+        }
+
+        /* =========================================================================
+         * Admin Authentication Check & Live Diagnostic Log Console
+         * ========================================================================= */
+        function appendAuthLog(msg, type = 'info') {
+            const consoleEl = document.getElementById('authLogConsole');
+            if (!consoleEl) return;
+            const now = new Date();
+            const timeStr = now.toTimeString().split(' ')[0];
+            
+            let colorClass = 'text-slate-300';
+            if (type === 'success') colorClass = 'text-emerald-400 font-bold';
+            if (type === 'error') colorClass = 'text-rose-400 font-bold';
+            if (type === 'warn') colorClass = 'text-amber-300 font-bold';
+            if (type === 'highlight') colorClass = 'text-teal-300 font-bold';
+            
+            const line = document.createElement('div');
+            line.className = colorClass;
+            line.textContent = `[${timeStr}] ${msg}`;
+            consoleEl.appendChild(line);
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+        }
+
+        function clearAuthLog() {
+            const consoleEl = document.getElementById('authLogConsole');
+            if (consoleEl) {
+                consoleEl.innerHTML = '<div class="text-slate-500">// Diagnostic log cleared.</div>';
+            }
+        }
+
+        function setAuthAlert(msg, type = 'error') {
+            const alertBox = document.getElementById('authAlertBox');
+            if (!alertBox) return;
+            if (!msg) {
+                alertBox.classList.add('hidden');
+                alertBox.textContent = '';
+                return;
+            }
+            alertBox.classList.remove('hidden');
+            if (type === 'error') {
+                alertBox.className = 'p-3 rounded-xl text-xs font-bold text-right bg-rose-500/20 text-rose-300 border border-rose-500/40';
+            } else if (type === 'success') {
+                alertBox.className = 'p-3 rounded-xl text-xs font-bold text-right bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+            } else {
+                alertBox.className = 'p-3 rounded-xl text-xs font-bold text-right bg-amber-500/20 text-amber-300 border border-amber-500/40';
+            }
+            alertBox.textContent = msg;
+        }
+
+        function fillDefaultAdminPassword() {
+            const input = document.getElementById('adminLoginPasswordInput');
+            if (input) {
+                input.value = 'admin123';
+                input.focus();
+                setAuthAlert('');
+                appendAuthLog('⚡ تم وضع كلمة المرور الافتراضية "admin123" في حقل الإدخال تلقائياً.', 'highlight');
+            }
+        }
+
+        async function runAuthDiagnosticPing() {
+            appendAuthLog('🔄 فحص الاتصال بالخادم وقاعدة بيانات MySQL...', 'highlight');
+            const envEl = document.getElementById('authEnvInfo');
+
+            if (typeof isGitHubPages === 'function' && isGitHubPages()) {
+                appendAuthLog(`🌐 بيئة التشغيل: GitHub Pages (${window.location.host})`, 'highlight');
+                appendAuthLog('☁️ استضافة سحابية ثابتة: يعمل المتجر بنظام Client-Side المستقل فائق السرعة.', 'info');
+                appendAuthLog('🔒 تم التحقق الأمني محلياً بكلمة المرور الافتراضية (admin123).', 'success');
+                if (envEl) envEl.textContent = 'البيئة: سحابي (GitHub Pages)';
+                return;
+            }
+
+            appendAuthLog(`🌐 بيئة التشغيل: ${window.location.protocol} (${window.location.host || 'محلي'})`, 'info');
+
+            try {
+                const isConn = await MeemAPI.isConnected();
+                if (isConn) {
+                    appendAuthLog('🟢 استجابة الـ API: خادم WAMP متصل وقاعدة بيانات MySQL نشطة.', 'success');
+                    if (envEl) envEl.textContent = 'البيئة: MySQL (WAMP Localhost)';
+                    
+                    const res = await fetch('./api/settings.php');
+                    if (res.ok) {
+                        const info = await res.json();
+                        appendAuthLog(`📊 إحصائيات MySQL: منتجات = ${info.product_count} | شرائح = ${info.carousel_count} | العملة = ${info.settings.currency}`, 'info');
+                    }
+                } else {
+                    appendAuthLog('🟡 وضع المعاينة: الخادم غير متاح، يتم استخدام التخزين المحلي للمتصفح.', 'warn');
+                    if (envEl) envEl.textContent = 'البيئة: وضع محلي (Local Storage)';
+                }
+            } catch (err) {
+                appendAuthLog(`⚠️ خطأ أثناء فحص الاتصال: ${err.message}`, 'error');
+                if (envEl) envEl.textContent = 'البيئة: غير متصل';
+            }
+        }
+
+        async function resetAdminPasswordEmergency() {
+            if (!confirm('هل ترغب بإعادة ضبط كلمة مرور المسؤول إلى admin123 في قاعدة البيانات والمتصفح؟')) return;
+            appendAuthLog('🔄 بدء إعادة تعيين كلمة المرور إلى "admin123"...', 'warn');
+            try {
+                setAdminPassword('admin123');
+                
+                if (await MeemAPI.isConnected()) {
+                    await fetch('./api/settings.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: 'change_password', new_password: 'admin123' })
+                    });
+                    appendAuthLog('✅ تم حفظ كلمة المرور "admin123" بنجاح في جدول store_settings بقاعدة بيانات MySQL.', 'success');
+                } else {
+                    appendAuthLog('✅ تم ضبط كلمة المرور إلى "admin123" في التخزين المحلي للمتصفح.', 'success');
+                }
+                fillDefaultAdminPassword();
+                setAuthAlert('✅ تم ضبط كلمة المرور الافتراضية بنجاح إلى (admin123). يمكنك تسجيل الدخول الآن.', 'success');
+            } catch (err) {
+                appendAuthLog(`❌ فشل إعادة ضبط كلمة المرور: ${err.message}`, 'error');
+            }
+        }
+
+        async function checkAuthStatus() {
+            const isAuth = isAdminAuthenticated();
+            const gate = document.getElementById('adminLoginGate');
+            const app = document.getElementById('adminDashboardApp');
+
+            if (isAuth) {
+                gate.classList.add('hidden');
+                app.classList.remove('hidden');
+                await initDashboard();
+            } else {
+                gate.classList.remove('hidden');
+                app.classList.add('hidden');
+                runAuthDiagnosticPing();
+            }
+        }
+
+        async function handleAdminLogin(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            setAuthAlert('');
+
+            const passwordInput = document.getElementById('adminLoginPasswordInput');
+            const password = passwordInput.value;
+            const rememberMe = document.getElementById('adminRememberMe').checked;
+            const submitBtn = document.getElementById('adminLoginSubmitBtn');
+            const btnText = document.getElementById('adminLoginBtnText');
+
+            if (!password || password.trim().length === 0) {
+                setAuthAlert('يرجى كتابة كلمة المرور للدخول.', 'warn');
+                appendAuthLog('⚠️ تم الضغط على دخول مع ترك حقل كلمة المرور فارغاً.', 'warn');
+                passwordInput.focus();
+                return false;
+            }
+
+            appendAuthLog(`🔑 محاولة تسجيل الدخول... (طول الكلمة المدخلة: ${password.length} أحرف)`, 'highlight');
+            
+            if (submitBtn) submitBtn.disabled = true;
+            if (btnText) btnText.textContent = 'جاري التحقق من كلمة المرور...';
+
+            try {
+                const detail = await MeemAPI.verifyAdminPasswordDetailed(password);
+                appendAuthLog(`📡 طريقة التحقق المستخدمة: ${detail.mode} (رمز الحالة: ${detail.statusCode})`, 'info');
+
+                if (detail.valid) {
+                    appendAuthLog(`✅ نتيجة التحقق: ناجح! ${detail.message}`, 'success');
+                    setAuthAlert('✅ كلمة المرور صحيحة! جاري توجيهك إلى لوحة الإدارة...', 'success');
+                    setAdminSession(rememberMe);
+
+                    setTimeout(async () => {
+                        const gate = document.getElementById('adminLoginGate');
+                        const app = document.getElementById('adminDashboardApp');
+                        gate.classList.add('hidden');
+                        app.classList.remove('hidden');
+                        await initDashboard();
+                        showToast('تم تسجيل الدخول بنجاح إلى لوحة الإدارة');
+                    }, 500);
+                } else {
+                    const errMsg = detail.error || 'كلمة المرور غير صحيحة، يرجى كتابة admin123';
+                    appendAuthLog(`❌ نتيجة التحقق: فشل! ${errMsg}`, 'error');
+                    setAuthAlert(`❌ كلمة المرور غير صحيحة! ${detail.mode === 'mysql' ? '(رفضها خادم MySQL)' : '(رفضها النظام المحلي)'}. تأكد من كتابة admin123`, 'error');
+                    showToast('كلمة المرور غير صحيحة!', 'warning');
+                    passwordInput.select();
+                }
+            } catch (err) {
+                appendAuthLog(`💥 استثناء برمجي أثناء تسجيل الدخول: ${err.message}`, 'error');
+                setAuthAlert(`حدث خطأ أثناء الاتصال: ${err.message}`, 'error');
+            } finally {
+                if (submitBtn) submitBtn.disabled = false;
+                if (btnText) btnText.textContent = 'دخول إلى لوحة التحكم';
+            }
+
+            return false;
+        }
+
+        function handleAdminLogout() {
+            clearAdminSession();
+            checkAuthStatus();
+            showToast('تم تسجيل الخروج');
+        }
+
+        function togglePasswordVisibility(inputId) {
+            const input = document.getElementById(inputId);
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        /* =========================================================================
+         * Dashboard Tabs Switching
+         * ========================================================================= */
+        function switchDashboardTab(tab) {
+            document.getElementById('adminProductsSection').classList.add('hidden');
+            document.getElementById('adminCarouselSection').classList.add('hidden');
+            document.getElementById('adminDecoderSection').classList.add('hidden');
+            document.getElementById('adminOrdersSection').classList.add('hidden');
+
+            document.getElementById('dashTabBtnProducts').className = 'px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#132438] text-slate-300 hover:text-white border border-[#1f3857] flex items-center gap-2 transition whitespace-nowrap';
+            document.getElementById('dashTabBtnCarousel').className = 'px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#132438] text-slate-300 hover:text-white border border-[#1f3857] flex items-center gap-2 transition whitespace-nowrap';
+            document.getElementById('dashTabBtnDecoder').className = 'px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#132438] text-slate-300 hover:text-white border border-[#1f3857] flex items-center gap-2 transition whitespace-nowrap';
+            document.getElementById('dashTabBtnOrders').className = 'px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#132438] text-slate-300 hover:text-white border border-[#1f3857] flex items-center gap-2 transition whitespace-nowrap';
+
+            if (tab === 'products') {
+                document.getElementById('adminProductsSection').classList.remove('hidden');
+                document.getElementById('dashTabBtnProducts').className = 'px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#3B6FE0] text-white shadow flex items-center gap-2 transition whitespace-nowrap';
+                stopCameraScanner();
+            } else if (tab === 'carousel') {
+                document.getElementById('adminCarouselSection').classList.remove('hidden');
+                document.getElementById('dashTabBtnCarousel').className = 'px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#00B574] text-white shadow flex items-center gap-2 transition whitespace-nowrap';
+                renderAdminCarouselCards();
+                stopCameraScanner();
+            } else if (tab === 'decoder') {
+                document.getElementById('adminDecoderSection').classList.remove('hidden');
+                document.getElementById('dashTabBtnDecoder').className = 'px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#1DA1B9] text-white shadow flex items-center gap-2 transition whitespace-nowrap';
+            } else if (tab === 'orders') {
+                document.getElementById('adminOrdersSection').classList.remove('hidden');
+                document.getElementById('dashTabBtnOrders').className = 'px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#7C3AED] text-white shadow flex items-center gap-2 transition whitespace-nowrap';
+                stopCameraScanner();
+            }
+        }
+
+        /* =========================================================================
+         * Customer WhatsApp Redirection Settings
+         * ========================================================================= */
+        function initWhatsAppSettings() {
+            document.getElementById('adminWhatsappDirectInput').value = getStoreWhatsAppNumber();
+        }
+
+        async function saveDirectWhatsAppNumber() {
+            const inputVal = document.getElementById('adminWhatsappDirectInput').value;
+            const saved = await MeemAPI.updateWhatsAppNumber(inputVal);
+            document.getElementById('adminWhatsappDirectInput').value = saved;
+            showToast(`تم حفظ رقم واتساب المتجر (+${saved}) في قاعدة البيانات بنجاح!`);
+        }
+
+        function testCustomerWhatsAppRedirect() {
+            const phone = getStoreWhatsAppNumber().replace(/[^0-9]/g, '');
+            const testMsg = encodeURIComponent("مرحباً متجر ميم للإلكترونيات 👋، هذه رسالة تجربة مباشرة من لوحة الإدارة للتأكد من ربط الواتساب بنجاح.");
+            window.open(`https://wa.me/${phone}?text=${testMsg}`, '_blank');
+        }
+
+        /* =========================================================================
+         * Product Catalog CRUD with Multiple Images Support & MySQL
+         * ========================================================================= */
+        let _adminCachedProducts = [];
+
+        async function renderAdminProductsTable() {
+            const products = await MeemAPI.getProducts('all');
+            _adminCachedProducts = products;
+            document.getElementById('tabProductCountBadge').textContent = products.length;
+            const tbody = document.getElementById('adminProductsTableBody');
+
+            tbody.innerHTML = products.map(p => {
+                const img = (p.images && p.images[0]) ? p.images[0] : (p.image || 'assets/images/placeholder.svg');
+                const imgCount = (p.images && p.images.length) ? p.images.length : 1;
+                const catObj = MEEM_CATEGORIES.find(c => c.id === p.category);
+                const catName = catObj ? catNameFormat(catObj.name) : 'إلكترونيات';
+
+                return `
+                    <tr class="hover:bg-[#132438]/50 transition">
+                        <td class="p-2.5">
+                            <div class="relative w-10 h-10">
+                                <img src="${img}" alt="${p.name}" class="w-10 h-10 rounded-lg object-contain bg-[#132438] p-1 border border-[#1f3857]">
+                                ${imgCount > 1 ? `<span class="absolute -top-1 -right-1 bg-[#1DA1B9] text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center">${imgCount}</span>` : ''}
+                            </div>
+                        </td>
+                        <td class="p-2.5 font-mono text-teal-300 font-bold">#${p.id}</td>
+                        <td class="p-2.5 font-bold text-white max-w-xs truncate">${p.name}</td>
+                        <td class="p-2.5 text-slate-300">${catName}</td>
+                        <td class="p-2.5 text-left font-black text-[#00B574] font-mono">${Number(p.price).toLocaleString()} ر.س</td>
+                        <td class="p-2.5 text-center font-bold text-slate-200">${p.stock || 20}</td>
+                        <td class="p-2.5 text-center">
+                            <div class="flex items-center justify-center gap-1.5">
+                                <button onclick="openEditProductModal('${p.id}')" title="تعديل" class="w-7 h-7 rounded-lg bg-[#182e47] hover:bg-[#3B6FE0] text-teal-300 hover:text-white flex items-center justify-center">
+                                    <span data-icon="edit" data-size="12"></span>
+                                </button>
+                                <button onclick="handleDeleteProduct('${p.id}')" title="حذف" class="w-7 h-7 rounded-lg bg-[#182e47] hover:bg-rose-600 text-rose-400 hover:text-white flex items-center justify-center">
+                                    <span data-icon="trash" data-size="12"></span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            renderAllIcons();
+        }
+
+        function catNameFormat(name) {
+            return name.replace('المتحكمات ولوحات التطوير', 'متحكمات')
+                       .replace('الحساسات والمستشعرات', 'حساسات')
+                       .replace('المحركات والمشغلات ومغذيات الطاقة', 'مشغلات وطاقة')
+                       .replace('معدات القياس واللحام والتجميع', 'معدات وأدوات');
+        }
+
+        function openAddProductModal() {
+            document.getElementById('productModalHeading').innerHTML = '<span data-icon="plus" data-size="18" class="text-[#00B574]"></span><span>إضافة قطعة إلكترونية جديدة</span>';
+            document.getElementById('prodFormId').value = '';
+            document.getElementById('prodFormName').value = '';
+            document.getElementById('prodFormPrice').value = '';
+            document.getElementById('prodFormStock').value = '25';
+            document.getElementById('prodFormBadge').value = 'جديد';
+            document.getElementById('prodFormShortDesc').value = '';
+            document.getElementById('prodFormFullDesc').value = '';
+            currentProductGalleryImages = [];
+            renderProductGalleryPreview();
+            document.getElementById('productEditModal').classList.remove('hidden');
+            renderAllIcons();
+        }
+
+        function openEditProductModal(productId) {
+            const product = _adminCachedProducts.find(p => p.id === productId) || getAllProducts().find(p => p.id === productId);
+            if (!product) return;
+
+            document.getElementById('productModalHeading').innerHTML = '<span data-icon="edit" data-size="18" class="text-[#3B6FE0]"></span><span>تعديل بيانات القطعة</span>';
+            document.getElementById('prodFormId').value = product.id;
+            document.getElementById('prodFormName').value = product.name;
+            document.getElementById('prodFormCategory').value = product.category;
+            document.getElementById('prodFormPrice').value = product.price;
+            document.getElementById('prodFormStock').value = product.stock || 20;
+            document.getElementById('prodFormBadge').value = product.badge || 'متوفر';
+            document.getElementById('prodFormShortDesc').value = product.shortDesc || product.short_desc || '';
+            document.getElementById('prodFormFullDesc').value = product.fullDesc || product.description || '';
+
+            currentProductGalleryImages = (product.images && product.images.length > 0) ? [...product.images] : ['assets/images/placeholder.svg'];
+            renderProductGalleryPreview();
+
+            document.getElementById('productEditModal').classList.remove('hidden');
+            renderAllIcons();
+        }
+
+        function closeProductEditModal() {
+            document.getElementById('productEditModal').classList.add('hidden');
+        }
+
+        function compressAndAddImage(file, callback) {
+            if (file.type === 'image/svg+xml') {
+                const reader = new FileReader();
+                reader.onload = e => callback(e.target.result);
+                reader.readAsDataURL(file);
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(readerEvent) {
+                const img = new Image();
+                img.onload = function() {
+                    const MAX_WIDTH = 640;
+                    const MAX_HEIGHT = 640;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > MAX_WIDTH) {
+                            height = Math.round((height * MAX_WIDTH) / width);
+                            width = MAX_WIDTH;
+                        }
+                    } else {
+                        if (height > MAX_HEIGHT) {
+                            width = Math.round((width * MAX_HEIGHT) / height);
+                            height = MAX_HEIGHT;
+                        }
+                    }
+
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.75);
+                    callback(compressedDataUrl);
+                };
+                img.onerror = function() {
+                    callback(readerEvent.target.result);
+                };
+                img.src = readerEvent.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function handleMultipleProductImages(e) {
+            const files = Array.from(e.target.files);
+            if (!files || files.length === 0) return;
+
+            let loadedCount = 0;
+            files.forEach(file => {
+                compressAndAddImage(file, function(compressedUrl) {
+                    currentProductGalleryImages.push(compressedUrl);
+                    loadedCount++;
+                    if (loadedCount === files.length) {
+                        renderProductGalleryPreview();
+                        showToast(`تم ضغط وإضافة ${files.length} صورة إلى المعرض بنجاح`);
+                    }
+                });
+            });
+            // Reset input so user can pick again
+            e.target.value = '';
+        }
+
+        function renderProductGalleryPreview() {
+            const container = document.getElementById('prodFormGalleryPreview');
+            if (currentProductGalleryImages.length === 0) {
+                container.innerHTML = `
+                    <div class="text-slate-500 text-[11px] flex items-center justify-center w-full py-2">
+                        لم يتم اختيار صور بعد (سيتم استخدام الصورة الافتراضية)
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = currentProductGalleryImages.map((imgSrc, idx) => `
+                <div class="relative w-14 h-14 rounded-xl overflow-hidden border border-[#1f3857] group bg-[#132438]">
+                    <img src="${imgSrc}" class="w-full h-full object-contain p-1">
+                    <button 
+                        type="button" 
+                        onclick="removeProductGalleryImage(${idx})" 
+                        title="حذف الصورة"
+                        class="absolute top-0.5 right-0.5 w-4 h-4 rounded-full bg-rose-600 text-white flex items-center justify-center text-[10px] opacity-80 hover:opacity-100"
+                    >
+                        ×
+                    </button>
+                    ${idx === 0 ? '<span class="absolute bottom-0 inset-x-0 bg-[#00B574]/90 text-[8px] text-white text-center font-bold">الرئيسية</span>' : ''}
+                </div>
+            `).join('');
+        }
+
+        function removeProductGalleryImage(index) {
+            currentProductGalleryImages.splice(index, 1);
+            renderProductGalleryPreview();
+        }
+
+        async function handleSaveProductForm(e) {
+            e.preventDefault();
+            const id = document.getElementById('prodFormId').value;
+            const name = document.getElementById('prodFormName').value.trim();
+            const category = document.getElementById('prodFormCategory').value;
+            const price = parseFloat(document.getElementById('prodFormPrice').value);
+            const stock = parseInt(document.getElementById('prodFormStock').value) || 20;
+            const badge = document.getElementById('prodFormBadge').value.trim() || 'متوفر';
+            const shortDesc = document.getElementById('prodFormShortDesc').value.trim();
+            const fullDesc = document.getElementById('prodFormFullDesc').value.trim();
+
+            const productObj = {
+                id: id || undefined,
+                name,
+                category,
+                price,
+                stock,
+                badge,
+                shortDesc,
+                fullDesc,
+                images: currentProductGalleryImages.length > 0 ? currentProductGalleryImages : ['assets/images/placeholder.svg']
+            };
+
+            try {
+                const res = await MeemAPI.saveProduct(productObj);
+                if (res.success) {
+                    closeProductEditModal();
+                    await renderAdminProductsTable();
+                    if (res.mode === 'mysql') {
+                        showToast('تم حفظ ونشر المنتج في قاعدة بيانات MySQL بنجاح!');
+                    } else if (res.warning) {
+                        showToast(res.warning, 'warning');
+                    } else {
+                        showToast('تم حفظ ونشر القطعة الإلكترونية بنجاح!');
+                    }
+                } else {
+                    showToast(res.error || 'تعذر حفظ المنتج', 'warning');
+                }
+            } catch (err) {
+                console.error('handleSaveProductForm error:', err);
+                showToast('حدث خطأ أثناء حفظ المنتج: ' + err.message, 'warning');
+            }
+        }
+
+        async function handleDeleteProduct(productId) {
+            if (!confirm(`هل أنت متأكد من رغبتك بحذف القطعة #${productId}؟`)) return;
+            const res = await MeemAPI.deleteProduct(productId);
+            await renderAdminProductsTable();
+            showToast(res.mode === 'mysql' ? 'تم حذف القطعة من قاعدة بيانات MySQL بنجاح' : 'تم حذف القطعة بنجاح');
+        }
+
+        /* =========================================================================
+         * Hero Carousel Management (Admin Configurable & MySQL Synced)
+         * ========================================================================= */
+        let _adminCachedSlides = [];
+
+        async function renderAdminCarouselCards() {
+            const slides = await MeemAPI.getCarouselSlides();
+            _adminCachedSlides = slides;
+            document.getElementById('tabCarouselCountBadge').textContent = slides.length;
+            const container = document.getElementById('adminCarouselCardsList');
+
+            container.innerHTML = slides.map((slide, idx) => `
+                <div class="glass-card rounded-2xl p-4 border border-slate-200 dark:border-[#1f3857] flex flex-col justify-between space-y-3 relative overflow-hidden">
+                    ${slide.bgImage ? `
+                        <div class="absolute inset-0 bg-cover bg-center opacity-10 pointer-events-none" style="background-image: url('${slide.bgImage}');"></div>
+                    ` : ''}
+
+                    <div class="relative z-10">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded-full text-white" style="background-color: ${slide.badgeColor || '#00B574'}">
+                                ${slide.badge || 'شريحة'}
+                            </span>
+                            <span class="text-[10px] text-slate-400 font-mono">#${idx + 1} (${slide.id})</span>
+                        </div>
+
+                        <div class="flex items-start gap-3">
+                            <img src="${slide.image || 'assets/images/placeholder.svg'}" class="w-12 h-12 rounded-xl object-contain bg-slate-100 dark:bg-[#0E1B2B] p-1 border border-slate-200 dark:border-[#1f3857] shrink-0">
+                            <div>
+                                <h4 class="font-bold text-slate-900 dark:text-white text-xs line-clamp-1">${slide.title}</h4>
+                                <p class="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2 mt-0.5">${slide.subtitle}</p>
+                                <div class="flex items-center gap-1.5 text-[10px] font-semibold mt-1">
+                                    ${slide.bgImage ? `
+                                        <span class="text-teal-600 dark:text-teal-300 flex items-center gap-1">
+                                            <span data-icon="images" data-size="10"></span>
+                                            <span>خلفية صورة متوفرة</span>
+                                        </span>
+                                    ` : `
+                                        <span class="text-slate-400">تدرج افتراضي</span>
+                                    `}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-2 border-t border-slate-200 dark:border-[#1f3857]/60 flex items-center justify-between text-[11px] relative z-10">
+                        <span class="text-teal-600 dark:text-teal-300 font-semibold">زر: ${slide.buttonText || 'تصفح'}</span>
+                        <div class="flex items-center gap-1.5">
+                            <button onclick="openEditCarouselSlideModal('${slide.id}')" class="px-2 py-1 rounded-lg bg-slate-100 dark:bg-[#182e47] text-teal-600 dark:text-teal-300 hover:text-emerald-500 font-bold">تعديل</button>
+                            <button onclick="handleDeleteCarouselSlide('${slide.id}')" class="px-2 py-1 rounded-lg bg-slate-100 dark:bg-[#182e47] text-rose-500 hover:text-rose-600 font-bold">حذف</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            renderAllIcons();
+        }
+
+        function updateSlideBgPreview() {
+            const previewImg = document.getElementById('slideFormBgPreviewImg');
+            const placeholder = document.getElementById('slideFormBgPreviewPlaceholder');
+            if (!previewImg || !placeholder) return;
+
+            if (currentSlideBgImage) {
+                previewImg.src = currentSlideBgImage;
+                previewImg.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+            } else {
+                previewImg.src = '';
+                previewImg.classList.add('hidden');
+                placeholder.classList.remove('hidden');
+            }
+        }
+
+        function handleSlideBgImageUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            compressAndAddImage(file, function(compressedUrl) {
+                currentSlideBgImage = compressedUrl;
+                updateSlideBgPreview();
+                showToast('تمت معالجة وضبط صورة خلفية الشريحة بنجاح');
+            });
+            e.target.value = '';
+        }
+
+        function setSlideBgPreset(url) {
+            currentSlideBgImage = url;
+            updateSlideBgPreview();
+            showToast('تم تطبيق القالب كخلفية للشريحة');
+        }
+
+        function clearSlideBgImage() {
+            currentSlideBgImage = '';
+            updateSlideBgPreview();
+            showToast('تمت إزالة صورة الخلفية (سيتم استخدام التدرج الافتراضي)');
+        }
+
+        function openAddCarouselSlideModal() {
+            document.getElementById('carouselModalHeading').innerHTML = '<span data-icon="plus" data-size="16" class="text-[#00B574]"></span><span>إضافة شريحة إعلانية جديدة</span>';
+            document.getElementById('slideFormId').value = '';
+            document.getElementById('slideFormTitle').value = '';
+            document.getElementById('slideFormSubtitle').value = '';
+            document.getElementById('slideFormBadge').value = 'عرض مميز';
+            document.getElementById('slideFormBadgeColor').value = '#00B574';
+            document.getElementById('slideFormButtonText').value = 'تصفح الآن';
+            document.getElementById('slideFormButtonCategory').value = 'all';
+            document.getElementById('slideFormImagePreview').src = 'assets/images/placeholder.svg';
+            currentSlideImage = 'assets/images/placeholder.svg';
+            currentSlideBgImage = 'assets/images/bg-circuit.svg';
+            updateSlideBgPreview();
+            document.getElementById('carouselSlideModal').classList.remove('hidden');
+            renderAllIcons();
+        }
+
+        function openEditCarouselSlideModal(slideId) {
+            const slide = _adminCachedSlides.find(s => s.id === slideId) || getCarouselSlides().find(s => s.id === slideId);
+            if (!slide) return;
+
+            document.getElementById('carouselModalHeading').innerHTML = '<span data-icon="edit" data-size="16" class="text-[#3B6FE0]"></span><span>تعديل الشريحة الإعلانية</span>';
+            document.getElementById('slideFormId').value = slide.id;
+            document.getElementById('slideFormTitle').value = slide.title;
+            document.getElementById('slideFormSubtitle').value = slide.subtitle;
+            document.getElementById('slideFormBadge').value = slide.badge || '';
+            document.getElementById('slideFormBadgeColor').value = slide.badgeColor || slide.badge_color || '#00B574';
+            document.getElementById('slideFormButtonText').value = slide.buttonText || slide.button_text || 'تصفح';
+            document.getElementById('slideFormButtonCategory').value = slide.buttonCategory || slide.button_category || 'all';
+
+            currentSlideImage = slide.image || 'assets/images/placeholder.svg';
+            document.getElementById('slideFormImagePreview').src = currentSlideImage;
+
+            currentSlideBgImage = slide.bgImage || slide.bg_image || '';
+            updateSlideBgPreview();
+
+            document.getElementById('carouselSlideModal').classList.remove('hidden');
+            renderAllIcons();
+        }
+
+        function closeCarouselSlideModal() {
+            document.getElementById('carouselSlideModal').classList.add('hidden');
+        }
+
+        function previewSlideImage(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                currentSlideImage = evt.target.result;
+                document.getElementById('slideFormImagePreview').src = currentSlideImage;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function handleSaveCarouselSlide(e) {
+            e.preventDefault();
+            const id = document.getElementById('slideFormId').value;
+            const title = document.getElementById('slideFormTitle').value.trim();
+            const subtitle = document.getElementById('slideFormSubtitle').value.trim();
+            const badge = document.getElementById('slideFormBadge').value.trim();
+            const badgeColor = document.getElementById('slideFormBadgeColor').value;
+            const buttonText = document.getElementById('slideFormButtonText').value.trim();
+            const buttonCategory = document.getElementById('slideFormButtonCategory').value;
+
+            const slideObj = {
+                id: id || undefined,
+                title,
+                subtitle,
+                badge,
+                badgeColor,
+                buttonText,
+                buttonCategory,
+                image: currentSlideImage || 'assets/images/placeholder.svg',
+                bgImage: currentSlideBgImage || ''
+            };
+
+            const res = await MeemAPI.saveCarouselSlide(slideObj);
+            closeCarouselSlideModal();
+            await renderAdminCarouselCards();
+            showToast(res.mode === 'mysql' ? 'تم حفظ ونشر الشريحة في قاعدة بيانات MySQL بنجاح!' : 'تم حفظ ونشر الشريحة الإعلانية بنجاح!');
+        }
+
+        async function handleDeleteCarouselSlide(slideId) {
+            if (!confirm('هل أنت متأكد من حذف هذه الشريحة من السلايدر؟')) return;
+            const res = await MeemAPI.deleteCarouselSlide(slideId);
+            await renderAdminCarouselCards();
+            showToast(res.mode === 'mysql' ? 'تم حذف الشريحة من قاعدة بيانات MySQL' : 'تم حذف الشريحة من السلايدر');
+        }
+
+        function resetToDefaultCarouselSlides() {
+            if (!confirm('هل ترغب باستعادة الشرائح الإعلانية الافتراضية؟')) return;
+            resetCarouselSlides();
+            renderAdminCarouselCards();
+            showToast('تمت استعادة الشرائح الافتراضية');
+        }
+
+        /* =========================================================================
+         * QR Decoder Engine (Image, Camera, Text)
+         * ========================================================================= */
+        function switchScanMethod(method) {
+            document.getElementById('scanModeImage').classList.add('hidden');
+            document.getElementById('scanModeCamera').classList.add('hidden');
+            document.getElementById('scanModeText').classList.add('hidden');
+
+            document.getElementById('tabScanImage').className = 'px-3 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white';
+            document.getElementById('tabScanCamera').className = 'px-3 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white';
+            document.getElementById('tabScanText').className = 'px-3 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white';
+
+            if (method === 'image') {
+                document.getElementById('scanModeImage').classList.remove('hidden');
+                document.getElementById('tabScanImage').className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-[#1DA1B9] text-white';
+                stopCameraScanner();
+            } else if (method === 'camera') {
+                document.getElementById('scanModeCamera').classList.remove('hidden');
+                document.getElementById('tabScanCamera').className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-[#3B6FE0] text-white';
+            } else if (method === 'text') {
+                document.getElementById('scanModeText').classList.remove('hidden');
+                document.getElementById('tabScanText').className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-[#7C3AED] text-white';
+                stopCameraScanner();
+            }
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            document.getElementById('dropZone').classList.add('drag-over');
+        }
+        function handleDragLeave(e) {
+            e.preventDefault();
+            document.getElementById('dropZone').classList.remove('drag-over');
+        }
+        function handleFileDrop(e) {
+            e.preventDefault();
+            document.getElementById('dropZone').classList.remove('drag-over');
+            if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                processQRImageFile(e.dataTransfer.files[0]);
+            }
+        }
+        function handleFileSelect(e) {
+            if (e.target.files && e.target.files[0]) {
+                processQRImageFile(e.target.files[0]);
+            }
+        }
+        function processQRImageFile(file) {
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0, img.width, img.height);
+                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+                    if (code && code.data) {
+                        handleRawScannedString(code.data);
+                    } else {
+                        showToast('لم يتم العثور على باركود QR واضح في الصورة', 'warning');
+                    }
+                };
+                img.src = evt.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function startCameraScanner() {
+            try {
+                const video = document.getElementById('cameraVideo');
+                const laser = document.getElementById('cameraLaser');
+                const placeholder = document.getElementById('cameraPlaceholder');
+                const startBtn = document.getElementById('startCamBtn');
+                const stopBtn = document.getElementById('stopCamBtn');
+
+                videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+                video.srcObject = videoStream;
+                video.classList.remove('hidden');
+                laser.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+                startBtn.classList.add('hidden');
+                stopBtn.classList.remove('hidden');
+                await video.play();
+
+                const canvas = document.getElementById('cameraCanvas');
+                const ctx = canvas.getContext('2d');
+                cameraScanInterval = setInterval(() => {
+                    if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                        canvas.width = video.videoWidth;
+                        canvas.height = video.videoHeight;
+                        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                        const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+                        if (code && code.data) {
+                            handleRawScannedString(code.data);
+                            stopCameraScanner();
+                        }
+                    }
+                }, 250);
+            } catch (err) {
+                showToast('تعذر الوصول للكاميرا!', 'warning');
+            }
+        }
+
+        function stopCameraScanner() {
+            if (cameraScanInterval) clearInterval(cameraScanInterval);
+            if (videoStream) {
+                videoStream.getTracks().forEach(t => t.stop());
+                videoStream = null;
+            }
+            document.getElementById('cameraVideo')?.classList.add('hidden');
+            document.getElementById('cameraLaser')?.classList.add('hidden');
+            document.getElementById('cameraPlaceholder')?.classList.remove('hidden');
+            document.getElementById('startCamBtn')?.classList.remove('hidden');
+            document.getElementById('stopCamBtn')?.classList.add('hidden');
+        }
+
+        function decodeFromTextInput() {
+            const raw = document.getElementById('cipherTextInput').value.trim();
+            if (!raw) {
+                showToast('يرجى لصق الرمز المشفر أولاً', 'warning');
+                return;
+            }
+            handleRawScannedString(raw);
+        }
+
+        function handleRawScannedString(raw) {
+            const res = decryptOrder(raw);
+            if (!res.success) {
+                showToast(res.error, 'warning');
+                return;
+            }
+
+            currentDecodedOrder = res.order;
+            document.getElementById('decOrderId').textContent = currentDecodedOrder.orderId;
+            document.getElementById('decOrderTimestamp').textContent = `تاريخ الإنشاء: ${currentDecodedOrder.timestamp}`;
+            document.getElementById('decCustName').textContent = currentDecodedOrder.customer.name;
+            document.getElementById('decCustPhone').textContent = currentDecodedOrder.customer.phone;
+            document.getElementById('decCustAddress').textContent = currentDecodedOrder.customer.address;
+            document.getElementById('decOrderTotalAmount').textContent = `${currentDecodedOrder.total.toLocaleString()} ر.س`;
+
+            const gpsBtn = document.getElementById('decGpsMapBtn');
+            gpsBtn.href = currentDecodedOrder.customer.gps || `https://maps.google.com/?q=${encodeURIComponent(currentDecodedOrder.customer.address)}`;
+
+            document.getElementById('decItemsTableBody').innerHTML = currentDecodedOrder.items.map(item => `
+                <tr class="hover:bg-[#132438]/40">
+                    <td class="p-2.5 font-mono text-teal-300">#${item.id}</td>
+                    <td class="p-2.5 font-bold text-white">${item.name}</td>
+                    <td class="p-2.5 text-center text-[#3B6FE0] font-black">${item.qty}</td>
+                    <td class="p-2.5 text-left">${item.price.toLocaleString()} ر.س</td>
+                    <td class="p-2.5 text-left font-black text-[#00B574]">${item.total.toLocaleString()} ر.س</td>
+                </tr>
+            `).join('');
+
+            document.getElementById('decryptedOrderSection').classList.remove('hidden');
+            document.getElementById('decryptedOrderSection').scrollIntoView({ behavior: 'smooth' });
+            showToast('تم فك تشفير بيانات الطلب بنجاح والتحقق من صحته!');
+        }
+
+        function saveDecryptedOrderToHistory() {
+            if (!currentDecodedOrder) return;
+            const idx = adminOrders.findIndex(o => o.orderId === currentDecodedOrder.orderId);
+            if (idx !== -1) {
+                adminOrders[idx] = { ...currentDecodedOrder };
+            } else {
+                adminOrders.unshift({ ...currentDecodedOrder });
+            }
+            storageSet('MEEM_ADMIN_ORDERS', JSON.stringify(adminOrders));
+            renderHistoryTable();
+            showToast('تم حفظ الطلب في السجل بنجاح');
+        }
+
+        function sendCustomerConfirmationWhatsApp() {
+            if (!currentDecodedOrder) return;
+            const phone = currentDecodedOrder.customer.phone.replace(/[^0-9]/g, '');
+            const msg = encodeURIComponent(
+                `مرحباً أستاذ *${currentDecodedOrder.customer.name}* 👋\nتم استلام ومطابقة الباركود المشفر لطلبك رقم *${currentDecodedOrder.orderId}* بنجاح ✅\nالمبلغ المعتمد: *${currentDecodedOrder.total.toLocaleString()} ر.س*.\nجاري تجهيز قطعك الإلكترونية وشحنها لموقعك، شكراً لتعاملك مع متجر ميم!`
+            );
+            window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+        }
+
+        function printA4Invoice() {
+            if (!currentDecodedOrder) return;
+            const o = currentDecodedOrder;
+
+            document.getElementById('printStorePhone').textContent = '+' + getStoreWhatsAppNumber();
+            document.getElementById('printOrderId').textContent = o.orderId;
+            document.getElementById('printOrderDate').textContent = o.timestamp;
+            document.getElementById('printCustName').textContent = o.customer.name;
+            document.getElementById('printCustPhone').textContent = o.customer.phone;
+            document.getElementById('printCustAddress').textContent = o.customer.address;
+            document.getElementById('printTotalAmount').textContent = `${o.total.toLocaleString()} ر.س`;
+
+            document.getElementById('printItemsTableBody').innerHTML = o.items.map((item, idx) => `
+                <tr class="border-b border-slate-200">
+                    <td class="p-2">${idx + 1}</td>
+                    <td class="p-2 font-mono">#${item.id}</td>
+                    <td class="p-2 font-bold">${item.name}</td>
+                    <td class="p-2 text-center font-bold">${item.qty}</td>
+                    <td class="p-2 text-left">${item.price.toLocaleString()} ر.س</td>
+                    <td class="p-2 text-left font-bold">${item.total.toLocaleString()} ر.س</td>
+                </tr>
+            `).join('');
+
+            try {
+                JsBarcode("#printBarcodeSvg", o.orderId, { width: 1.5, height: 28, displayValue: false });
+            } catch (err) {
+                console.warn(err);
+            }
+            window.print();
+        }
+
+        function renderHistoryTable() {
+            const tbody = document.getElementById('historyTableBody');
+            const empty = document.getElementById('emptyHistoryState');
+
+            if (adminOrders.length === 0) {
+                tbody.innerHTML = '';
+                empty.classList.remove('hidden');
+                return;
+            }
+            empty.classList.add('hidden');
+            tbody.innerHTML = adminOrders.map(o => `
+                <tr class="hover:bg-[#132438]/50">
+                    <td class="p-2.5 font-mono font-bold text-teal-300">#${o.orderId}</td>
+                    <td class="p-2.5 text-slate-400 font-mono">${o.timestamp}</td>
+                    <td class="p-2.5 font-bold text-white">${o.customer.name}</td>
+                    <td class="p-2.5 text-slate-300 font-mono" dir="ltr">${o.customer.phone}</td>
+                    <td class="p-2.5 text-left font-black text-[#00B574]">${o.total.toLocaleString()} ر.س</td>
+                    <td class="p-2.5 text-center"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#00B574]/20 text-[#00B574]">مؤكد</span></td>
+                    <td class="p-2.5 text-center">
+                        <button onclick="handleRawScannedString('${encryptOrder(o)}')" class="px-2 py-1 rounded bg-[#182e47] text-teal-300 text-[10px] font-bold">عرض</button>
+                    </td>
+                </tr>
+            `).join('');
+            renderAllIcons();
+        }
+
+        function exportOrdersCSV() {
+            if (adminOrders.length === 0) {
+                showToast('السجل فارغ', 'warning');
+                return;
+            }
+            let csv = '\uFEFFرقم الطلب,التاريخ,اسم العميل,رقم الهاتف,العنوان,الإجمالي (ر.س)\n';
+            adminOrders.forEach(o => {
+                csv += `"${o.orderId}","${o.timestamp}","${o.customer.name}","${o.customer.phone}","${o.customer.address}","${o.total}"\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `meem-orders-${new Date().toISOString().slice(0, 10)}.csv`;
+            link.click();
+            showToast('تم تصدير ملف CSV!');
+        }
+
+        /* =========================================================================
+         * Settings & Password Modal
+         * ========================================================================= */
+        function openSettingsModal() {
+            document.getElementById('settingSecretKeyInput').value = getStoreSecretKey();
+            document.getElementById('settingNewPasswordInput').value = '';
+            document.getElementById('settingsModal').classList.remove('hidden');
+        }
+
+        function closeSettingsModal() {
+            document.getElementById('settingsModal').classList.add('hidden');
+        }
+
+        async function saveAdminSecuritySettings() {
+            const newPass = document.getElementById('settingNewPasswordInput').value.trim();
+            const newKey = document.getElementById('settingSecretKeyInput').value.trim();
+
+            if (newPass) {
+                const passRes = await MeemAPI.changeAdminPassword(newPass);
+                if (!passRes.success) {
+                    showToast(passRes.error, 'warning');
+                    return;
+                }
+            }
+            if (newKey) {
+                storageSet('MEEM_SECRET_KEY', newKey);
+            }
+            closeSettingsModal();
+            showToast('تم حفظ إعدادات الأمان في قاعدة البيانات بنجاح!');
+        }
+
+        let toastTimer;
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toastNotification');
+            const msgEl = document.getElementById('toastMessage');
+            msgEl.textContent = message;
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 3000);
+        }
+
+        async function updateDbStatusBadge() {
+            const badge = document.getElementById('dbStatusBadge');
+            const text = document.getElementById('dbStatusText');
+            const dot = document.getElementById('dbStatusDot');
+            if (!badge || !text) return;
+
+            if (typeof isGitHubPages === 'function' && isGitHubPages()) {
+                badge.className = "flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[11px] font-black bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-400 border border-blue-300 dark:border-blue-700 shadow-sm";
+                dot.className = "w-2 h-2 rounded-full bg-blue-500 animate-pulse";
+                text.textContent = "سحابي (GitHub Pages)";
+                return;
+            }
+
+            const isConnected = await MeemAPI.isConnected();
+            if (isConnected) {
+                badge.className = "flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[11px] font-black bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-700 shadow-sm";
+                dot.className = "w-2 h-2 rounded-full bg-emerald-500 animate-pulse";
+                text.textContent = "متصل بـ MySQL (WAMP Localhost)";
+            } else {
+                badge.className = "flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[11px] font-black bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400 border border-amber-300 dark:border-amber-700 shadow-sm";
+                dot.className = "w-2 h-2 rounded-full bg-amber-500";
+                text.textContent = "معاينة محلية (Local Storage)";
+            }
+        }
+
+        async function initDashboard() {
+            updateDbStatusBadge();
+            initWhatsAppSettings();
+            await renderAdminProductsTable();
+            await renderAdminCarouselCards();
+            renderHistoryTable();
+            renderAllIcons();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const currentTheme = getStoredTheme();
+            applyTheme(currentTheme);
+            updateAdminThemeUI(currentTheme);
+            checkAuthStatus();
+            renderAllIcons();
+        });
+    </script>
+</body>
+</html>

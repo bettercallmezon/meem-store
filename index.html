@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>متجر ميم للإلكترونيات | القطع والمتحكمات الذكية</title>
+
+    <!-- 100% Local Offline Stylesheet -->
+    <link rel="stylesheet" href="assets/css/app.css">
+
+    <!-- 100% Local Offline Tailwind Engine -->
+    <script src="assets/js/tailwind.min.js"></script>
+
+    <!-- 100% Local SVG Vector Icons -->
+    <script src="assets/js/icons.js"></script>
+
+    <!-- 100% Local Offline Barcode & QR Code Generators -->
+    <script src="assets/js/qrcode.min.js"></script>
+    <script src="assets/js/jsbarcode.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ['Cairo', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        meem: {
+                            surface: '#F8FAFC',
+                            card: '#FFFFFF',
+                            cardHover: '#F1F5F9',
+                            border: '#E2E8F0',
+                            emerald: '#00B574',
+                            emeraldHover: '#009b63',
+                            teal: '#0891B2',
+                            tealHover: '#0e7490',
+                            blue: '#2563EB',
+                            blueHover: '#1d4ed8',
+                            purple: '#7C3AED',
+                            purpleHover: '#6a2fd3'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="min-h-screen flex flex-col bg-[#F8FAFC] text-slate-800 selection:bg-[#00B574] selection:text-white pb-20 md:pb-0 theme-light">
+
+    <!-- Top Announcement Bar (Desktop) -->
+    <div class="hidden sm:block bg-gradient-to-r from-[#7C3AED] via-[#3B6FE0] to-[#1DA1B9] text-white text-xs py-2 px-4 shadow-md font-semibold">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+                <span class="bg-white/20 text-white px-2.5 py-0.5 rounded-full text-xs font-bold flex items-center gap-1.5">
+                    <span data-icon="shield" data-size="14"></span> نظام طلبات مشفر بالباركود
+                </span>
+                <span>اختر قطعك الإلكترونية ⬅️ أنشئ باركود الطلب ⬅️ أرسله لواتساب المتجر لتأكيد الدفع والتوصيل!</span>
+            </div>
+            
+            <a href="admin.html" class="inline-flex items-center gap-1.5 text-xs bg-slate-900/60 hover:bg-slate-900 text-teal-300 hover:text-white px-3 py-1 rounded-lg transition border border-teal-400/30">
+                <span data-icon="lock" data-size="13"></span>
+                <span>بوابة الإدارة وفك التشفير</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-40 glass-panel border-b border-[#1f3857]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-3">
+            
+            <!-- Brand Logo -->
+            <a href="index.html" class="flex items-center gap-2.5 sm:gap-3 group">
+                <img src="assets/images/logo.svg" alt="متجر ميم" class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl shadow-lg shadow-[#3B6FE0]/25">
+                <div>
+                    <h1 class="text-base sm:text-2xl font-black tracking-tight text-white flex items-center gap-1.5">
+                        متجر ميم <span class="text-[10px] sm:text-xs px-2 py-0.5 rounded bg-[#1DA1B9]/15 text-[#1DA1B9] font-bold border border-[#1DA1B9]/30">للإلكترونيات</span>
+                    </h1>
+                    <p class="text-[10px] sm:text-[11px] text-slate-400 font-medium hidden xs:block">القطع والمتحكمات والحساسات الذكية</p>
+                </div>
+            </a>
+
+            <!-- Search Input (Desktop) -->
+            <div class="hidden md:flex flex-1 max-w-md mx-6">
+                <div class="relative w-full">
+                    <input 
+                        type="text" 
+                        id="searchInputDesktop"
+                        oninput="handleSearch(this.value)"
+                        placeholder="ابحث عن قطعة (ESP32, أردوينو, حساسات, كاوية, سيرفو)..." 
+                        class="w-full bg-[#132438] border border-[#1f3857] focus:border-[#1DA1B9] rounded-xl py-2.5 pr-11 pl-4 text-sm text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1DA1B9]/20 transition"
+                    >
+                    <span data-icon="search" data-size="16" class="absolute right-3.5 top-3 text-[#1DA1B9]"></span>
+                </div>
+            </div>
+
+            <!-- Header Action Controls -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <!-- Theme Slider Switcher (Light / Dark) -->
+                <div class="flex items-center gap-1.5" title="تبديل المظهر النهاري / الليلي">
+                    <div 
+                        onclick="handleToggleTheme()" 
+                        class="theme-switch-slider" 
+                        id="themeSwitchBtn"
+                    >
+                        <div class="theme-switch-handle" id="themeSwitchHandle">
+                            <span data-icon="moon" data-size="12" id="themeSwitchIcon"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MySQL Database Live Sync Indicator -->
+                <div id="storefrontDbBadge" class="hidden items-center gap-1.5 bg-emerald-500/10 border border-[#00B574]/40 rounded-xl px-2.5 sm:px-3 py-1.5 sm:py-2 text-[11px] sm:text-xs font-black text-[#00B574]" title="متصل مباشرة بقاعدة بيانات MySQL على خادم WAMP">
+                    <span class="w-2 h-2 rounded-full bg-[#00B574] animate-pulse"></span>
+                    <span>قاعدة بيانات MySQL</span>
+                </div>
+
+                <!-- Currency Badge (Fixed to SAR) -->
+                <div class="hidden sm:flex items-center gap-1.5 bg-[#132438] border border-[#1f3857] rounded-xl px-3 py-2 text-xs font-bold text-[#00B574]">
+                    <span>ريال سعودي (ر.س)</span>
+                </div>
+
+                <!-- Admin Link -->
+                <a 
+                    href="admin.html" 
+                    title="لوحة الإدارة وفك تشفير الباركود"
+                    class="hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#132438] hover:bg-[#182e47] text-slate-200 border border-[#1f3857] text-xs font-bold transition group"
+                >
+                    <span data-icon="lock" data-size="15" class="text-[#1DA1B9] group-hover:text-[#00B574] transition"></span>
+                    <span>لوحة الإدارة</span>
+                </a>
+
+                <!-- Shopping Cart Trigger Button -->
+                <button 
+                    onclick="toggleCartDrawer(true)"
+                    class="relative flex items-center gap-2.5 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-gradient-to-r from-[#3B6FE0] to-[#1DA1B9] hover:from-[#2b5dc9] hover:to-[#17879b] text-white font-bold shadow-lg shadow-[#3B6FE0]/25 transition active:scale-95"
+                >
+                    <div class="relative">
+                        <span data-icon="cart" data-size="18"></span>
+                        <span id="cartCountBadge" class="absolute -top-2.5 -right-2.5 bg-[#00B574] text-white text-[10px] font-black w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center border-2 border-[#0E1B2B] shadow">
+                            0
+                        </span>
+                    </div>
+                    <div class="text-right hidden sm:block">
+                        <div class="text-[10px] text-teal-100 font-normal leading-none">سلة المشتريات</div>
+                        <div id="headerCartTotal" class="text-xs font-black mt-0.5">0 ر.س</div>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Search Bar -->
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative w-full">
+                <input 
+                    type="text" 
+                    id="searchInputMobile"
+                    oninput="handleSearch(this.value)"
+                    placeholder="ابحث عن قطعة إلكترونية..." 
+                    class="w-full bg-[#132438] border border-[#1f3857] focus:border-[#1DA1B9] rounded-xl py-2 pr-10 pl-4 text-xs text-white placeholder-slate-400 focus:outline-none"
+                >
+                <span data-icon="search" data-size="14" class="absolute right-3.5 top-2.5 text-[#1DA1B9]"></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- =========================================================================
+         Hero Banner Auto-Slider Carousel (Cycles every 5 seconds)
+         Configurable from Admin Dashboard
+         ========================================================================= -->
+    <section class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-4 sm:pt-6 pb-2">
+        <div 
+            class="carousel-container glass-panel border border-[#1f3857] shadow-2xl relative" 
+            id="heroCarouselContainer"
+            onmouseenter="pauseCarousel()" 
+            onmouseleave="resumeCarousel()"
+        >
+            <!-- Slides Container -->
+            <div id="carouselSlidesHolder" class="relative min-h-[220px] sm:min-h-[280px] lg:min-h-[300px] flex items-center">
+                <!-- Slides Injected dynamically via JS from getCarouselSlides() -->
+            </div>
+
+            <!-- Left / Right Navigation Arrows -->
+            <button 
+                onclick="prevSlide()" 
+                aria-label="الشريحة السابقة"
+                class="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#0E1B2B]/80 hover:bg-[#3B6FE0] text-white flex items-center justify-center border border-[#1f3857] transition shadow z-20"
+            >
+                <span data-icon="chevronRight" data-size="16"></span>
+            </button>
+            <button 
+                onclick="nextSlide()" 
+                aria-label="الشريحة التالية"
+                class="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#0E1B2B]/80 hover:bg-[#3B6FE0] text-white flex items-center justify-center border border-[#1f3857] transition shadow z-20"
+            >
+                <span data-icon="chevronLeft" data-size="16"></span>
+            </button>
+
+            <!-- Bottom 5-Second Interval Progress Bar -->
+            <div class="carousel-progress-bar" id="carouselProgressBar"></div>
+        </div>
+
+        <!-- Carousel Pagination Dots -->
+        <div class="carousel-dots mt-3" id="carouselDots">
+            <!-- Rendered by JS -->
+        </div>
+    </section>
+
+    <!-- Main Storefront Catalog -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8">
+        
+        <!-- Category Filters -->
+        <div class="mb-6">
+            <div id="categoryTabs" class="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar">
+                <!-- Rendered dynamically via JS -->
+            </div>
+        </div>
+
+        <!-- Products Grid (2 columns on mobile, 4 on desktop) -->
+        <div id="productsGrid" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
+            <!-- Populated dynamically via JS -->
+        </div>
+
+        <!-- Empty Search State -->
+        <div id="emptyProductsState" class="hidden text-center py-16 bg-[#132438]/50 rounded-3xl border border-[#1f3857] my-6">
+            <span data-icon="box" data-size="40" class="text-slate-500 mb-3 mx-auto"></span>
+            <h3 class="text-lg font-bold text-white mb-1">لا توجد قطع مطابقة لبحثك</h3>
+            <p class="text-xs text-slate-400 mb-4">جرب البحث بكلمات أخرى أو اختر تصنيفاً مختلفاً</p>
+            <button onclick="resetFilters()" class="px-4 py-2 rounded-xl bg-[#3B6FE0] hover:bg-[#2b5dc9] text-white text-xs font-bold transition">
+                عرض جميع المنتجات
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Product Quick View & Specifications Modal (Supports Multiple Images Gallery) -->
+    <div id="productDetailModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden overflow-y-auto p-3 sm:p-6 flex items-start sm:items-center justify-center">
+        <div class="glass-panel bg-white dark:bg-[#132438] border border-slate-200 dark:border-[#1DA1B9]/40 rounded-3xl max-w-4xl w-full shadow-2xl my-auto relative max-h-[90vh] flex flex-col overflow-hidden">
+            
+            <!-- Modal Header (Fixed at top) -->
+            <div class="p-4 sm:p-5 border-b border-slate-200 dark:border-[#1f3857] flex items-center justify-between gap-3 bg-slate-50/90 dark:bg-[#0E1B2B]/90 shrink-0">
+                <div class="min-w-0">
+                    <span id="modalCategoryName" class="text-[11px] font-bold text-teal-600 dark:text-[#1DA1B9] uppercase tracking-wider block"></span>
+                    <h2 id="modalTitle" class="text-base sm:text-lg font-black text-slate-900 dark:text-white truncate mt-0.5 leading-snug"></h2>
+                </div>
+                <button onclick="closeProductModal()" class="w-9 h-9 rounded-xl bg-white dark:bg-[#0E1B2B] hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-[#1f3857] text-slate-500 dark:text-slate-300 flex items-center justify-center border border-slate-200 dark:border-[#1f3857] transition shrink-0 shadow-sm" title="إغلاق النافذة">
+                    <span data-icon="close" data-size="16"></span>
+                </button>
+            </div>
+
+            <!-- Modal Scrollable Body -->
+            <div class="p-4 sm:p-6 overflow-y-auto flex-1 space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-start">
+                    
+                    <!-- Right Column: Images Gallery (5 cols on md+) -->
+                    <div class="md:col-span-5 space-y-3">
+                        <div class="relative h-52 sm:h-64 rounded-2xl overflow-hidden bg-slate-100 dark:bg-[#0E1B2B] border border-slate-200 dark:border-[#1f3857] flex items-center justify-center p-3 shadow-inner">
+                            <img id="modalMainImg" src="" alt="" class="w-full h-full object-contain">
+                            <span id="modalBadge" class="absolute top-3 right-3 text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-lg text-white shadow"></span>
+                            <span id="modalSku" class="absolute bottom-2 left-3 text-[10px] font-mono bg-white/90 dark:bg-[#0E1B2B]/90 text-teal-600 dark:text-teal-300 px-2 py-0.5 rounded border border-slate-200 dark:border-[#1f3857] shadow-sm"></span>
+                        </div>
+
+                        <!-- Multiple Images Thumbnail Strip -->
+                        <div>
+                            <div class="text-[10px] text-slate-500 dark:text-slate-400 mb-1.5 font-bold flex items-center gap-1">
+                                <span data-icon="images" data-size="12"></span>
+                                <span>معرض صور القطعة (اضغط للتبديل):</span>
+                            </div>
+                            <div id="modalThumbnailsStrip" class="thumbnail-strip">
+                                <!-- Thumbnails rendered dynamically -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Left Column: Specs, Desc, Price (7 cols on md+) -->
+                    <div class="md:col-span-7 space-y-3.5">
+                        
+                        <!-- Price & Stock Status -->
+                        <div class="flex items-center justify-between p-3 rounded-2xl bg-slate-50 dark:bg-[#0E1B2B]/80 border border-slate-200 dark:border-[#1f3857]">
+                            <div>
+                                <span class="text-[10px] text-slate-500 dark:text-slate-400 block font-bold">سعر القطعة</span>
+                                <div class="text-xl sm:text-2xl font-black text-[#00B574]">
+                                    <span id="modalPrice"></span> <small class="text-xs font-bold">ر.س</small>
+                                </div>
+                            </div>
+                            <span id="modalStockStatus" class="text-[11px] px-3 py-1 rounded-full font-bold"></span>
+                        </div>
+
+                        <!-- Description Box (scrollable if very long) -->
+                        <div>
+                            <h4 class="text-xs font-black text-slate-800 dark:text-slate-200 mb-1 flex items-center gap-1.5">
+                                <span data-icon="fileText" data-size="14" class="text-teal-600 dark:text-teal-300"></span>
+                                <span>الوصف والمميزات:</span>
+                            </h4>
+                            <p id="modalDesc" class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed bg-slate-50 dark:bg-[#0E1B2B]/70 p-3.5 rounded-2xl border border-slate-200 dark:border-[#1f3857] max-h-44 sm:max-h-52 overflow-y-auto whitespace-pre-line"></p>
+                        </div>
+
+                        <!-- Technical Specs -->
+                        <div>
+                            <h4 class="text-xs font-black text-slate-800 dark:text-slate-200 mb-1 flex items-center gap-1.5">
+                                <span data-icon="microchip" data-size="14" class="text-[#3B6FE0]"></span>
+                                <span>المواصفات الفنية:</span>
+                            </h4>
+                            <div id="modalSpecsTable" class="bg-slate-50 dark:bg-[#0E1B2B] rounded-2xl border border-slate-200 dark:border-[#1f3857] p-3 text-xs space-y-1.5 max-h-36 overflow-y-auto"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer (Fixed at bottom) -->
+            <div class="p-3 sm:p-4 border-t border-slate-200 dark:border-[#1f3857] bg-slate-50/95 dark:bg-[#0E1B2B]/95 flex items-center gap-3 shrink-0">
+                <div class="qty-stepper flex items-center bg-white dark:bg-[#0E1B2B] rounded-xl border border-slate-300 dark:border-[#1f3857] p-1 shadow-sm">
+                    <button type="button" onclick="changeModalQty(1)" class="qty-btn qty-btn-plus w-8 h-8 rounded-lg bg-emerald-50 hover:bg-emerald-500 hover:text-white text-emerald-700 dark:bg-[#182e47] dark:text-emerald-400 dark:hover:bg-emerald-600 dark:hover:text-white flex items-center justify-center border border-emerald-200 dark:border-emerald-700/50 shadow-sm transition" title="زيادة الكمية">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    </button>
+                    <span id="modalQtyDisplay" class="qty-display w-8 text-center font-black text-xs sm:text-sm text-slate-900 dark:text-white">1</span>
+                    <button type="button" onclick="changeModalQty(-1)" class="qty-btn qty-btn-minus w-8 h-8 rounded-lg bg-rose-50 hover:bg-rose-500 hover:text-white text-rose-700 dark:bg-[#182e47] dark:text-rose-400 dark:hover:bg-rose-600 dark:hover:text-white flex items-center justify-center border border-rose-200 dark:border-rose-700/50 shadow-sm transition" title="تقليل الكمية">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    </button>
+                </div>
+
+                <button 
+                    onclick="addModalProductToCart()"
+                    class="flex-1 py-3 px-5 rounded-xl bg-gradient-to-r from-[#00B574] to-[#0891B2] hover:from-[#009b63] hover:to-[#0e7490] text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-[#00B574]/25 flex items-center justify-center gap-2 transition active:scale-95"
+                >
+                    <span data-icon="cart-plus" data-size="16"></span>
+                    <span>إضافة إلى سلة المشتريات</span>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Shopping Cart & GPS Checkout Slide-Over Drawer -->
+    <div id="cartDrawerBackdrop" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden transition-opacity">
+        <div class="fixed inset-y-0 left-0 max-w-full flex pl-0 sm:pl-10">
+            <div id="cartDrawer" class="w-screen max-w-lg bg-white dark:bg-[#0E1B2B] text-slate-800 dark:text-white border-r border-slate-200 dark:border-[#1f3857] flex flex-col justify-between shadow-2xl">
+                
+                <!-- Drawer Header -->
+                <div class="p-4 sm:p-5 border-b border-slate-200 dark:border-[#1f3857] flex items-center justify-between bg-slate-50 dark:bg-[#132438]">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-xl bg-[#3B6FE0]/15 dark:bg-[#3B6FE0]/20 border border-[#3B6FE0]/30 dark:border-[#3B6FE0]/40 flex items-center justify-center text-[#3B6FE0]">
+                            <span data-icon="cart" data-size="16"></span>
+                        </div>
+                        <div>
+                            <h2 class="text-sm sm:text-base font-black text-slate-900 dark:text-white">سلة المشتريات وتأكيد الطلب</h2>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400">سجل بيانات التوصيل وأنشئ باركود الطلب</p>
+                        </div>
+                    </div>
+                    <button onclick="toggleCartDrawer(false)" class="w-8 h-8 rounded-xl bg-white dark:bg-[#0E1B2B] hover:bg-slate-100 dark:hover:bg-[#182e47] text-slate-600 dark:text-slate-300 flex items-center justify-center border border-slate-200 dark:border-[#1f3857] transition shadow-sm" title="إغلاق السلة">
+                        <span data-icon="close" data-size="14"></span>
+                    </button>
+                </div>
+
+                <!-- Drawer Body -->
+                <div class="flex-1 overflow-y-auto p-4 sm:p-5 space-y-5">
+                    <div>
+                        <div class="flex items-center justify-between mb-2.5">
+                            <h3 class="text-xs font-black text-teal-600 dark:text-[#1DA1B9] flex items-center gap-1.5 uppercase">
+                                <span data-icon="microchip" data-size="14"></span>
+                                <span>القطع المختارة (<span id="drawerItemCount">0</span>)</span>
+                            </h3>
+                            <button onclick="clearCart()" id="clearCartBtn" class="text-[11px] text-rose-500 hover:text-rose-600 font-semibold hidden flex items-center gap-1">
+                                <span data-icon="trash" data-size="12"></span> إفراغ السلة
+                            </button>
+                        </div>
+
+                        <div id="cartItemsContainer" class="space-y-2.5"></div>
+                    </div>
+
+                    <!-- Checkout Form -->
+                    <form id="checkoutForm" onsubmit="handleOrderSubmit(event)" class="space-y-3.5 border-t border-slate-200 dark:border-[#1f3857] pt-4">
+                        <h3 class="text-xs sm:text-sm font-black text-[#00B574] flex items-center gap-1.5">
+                            <span data-icon="user" data-size="15"></span>
+                            <span>بيانات المستلم وموقع التوصيل:</span>
+                        </h3>
+
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">الاسم الكامل <span class="text-rose-400">*</span></label>
+                            <input 
+                                type="text" 
+                                id="custName" 
+                                required
+                                placeholder="مثال: المهندس أحمد التميمي" 
+                                class="w-full bg-slate-50 dark:bg-[#132438] border border-slate-300 dark:border-[#1f3857] focus:border-[#00B574] rounded-xl py-2 px-3 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none"
+                            >
+                        </div>
+
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">رقم الواتساب <span class="text-rose-400">*</span></label>
+                            <input 
+                                type="tel" 
+                                id="custPhone" 
+                                required
+                                dir="ltr"
+                                placeholder="+966 5X XXX XXXX" 
+                                class="w-full bg-slate-50 dark:bg-[#132438] border border-slate-300 dark:border-[#1f3857] focus:border-[#00B574] rounded-xl py-2 px-3 text-xs sm:text-sm text-slate-900 dark:text-white text-right placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none"
+                            >
+                        </div>
+
+                        <div>
+                            <div class="flex items-center justify-between mb-1">
+                                <label class="text-[11px] font-bold text-slate-700 dark:text-slate-300">المدينة والعنوان التفصيلي <span class="text-rose-400">*</span></label>
+                                <button 
+                                    type="button" 
+                                    onclick="acquireGPSLocation()"
+                                    id="gpsLocateBtn"
+                                    class="text-[10px] font-bold text-[#1DA1B9] bg-[#1DA1B9]/15 hover:bg-[#1DA1B9] hover:text-white px-2 py-0.5 rounded-lg border border-[#1DA1B9]/30 transition flex items-center gap-1"
+                                >
+                                    <span data-icon="gps" data-size="12"></span>
+                                    <span>موقعي GPS</span>
+                                </button>
+                            </div>
+                            <input 
+                                type="text" 
+                                id="custLocation" 
+                                required
+                                placeholder="المدينة - الحي - الشارع..." 
+                                class="w-full bg-slate-50 dark:bg-[#132438] border border-slate-300 dark:border-[#1f3857] focus:border-[#00B574] rounded-xl py-2 px-3 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none"
+                            >
+                            <div id="gpsStatusContainer" class="hidden mt-1.5 p-1.5 rounded-lg bg-[#00B574]/10 border border-[#00B574]/30 text-[10px] text-[#00B574] flex items-center justify-between">
+                                <span class="flex items-center gap-1"><span data-icon="check" data-size="12"></span> تم التقاط إحداثيات GPS</span>
+                                <a id="gpsMapLink" href="#" target="_blank" class="underline font-bold text-slate-900 dark:text-white">عرض بالخريطة</a>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">ملاحظات إضافية (اختياري)</label>
+                            <textarea 
+                                id="custNotes" 
+                                rows="2" 
+                                placeholder="أي تفاصيل خاصة حول الطلب أو وقت التوصيل..." 
+                                class="w-full bg-slate-50 dark:bg-[#132438] border border-slate-300 dark:border-[#1f3857] focus:border-[#00B574] rounded-xl p-2.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none resize-none"
+                            ></textarea>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Drawer Footer -->
+                <div class="p-4 border-t border-slate-200 dark:border-[#1f3857] bg-slate-50 dark:bg-[#132438] space-y-2.5">
+                    <div class="flex items-center justify-between text-xs sm:text-sm">
+                        <span class="text-slate-700 dark:text-slate-300 font-semibold">إجمالي الطلب:</span>
+                        <span id="drawerCartTotal" class="text-lg sm:text-xl font-black text-[#00B574]">0 ر.س</span>
+                    </div>
+
+                    <button 
+                        type="submit" 
+                        form="checkoutForm"
+                        id="confirmOrderBtn"
+                        class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-[#00B574] to-[#1DA1B9] hover:from-[#009b63] hover:to-[#17879b] text-white font-black text-xs sm:text-sm shadow-lg shadow-[#00B574]/25 flex items-center justify-center gap-2 transition active:scale-98"
+                    >
+                        <span data-icon="qrcode" data-size="16"></span>
+                        <span>تأكيد الطلب وإنشاء الباركود المشفر</span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Encrypted QR Code & WhatsApp Ticket Modal -->
+    <div id="barcodeTicketModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-[#132438] border border-[#00B574]/50 rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl neon-glow-emerald my-6 relative">
+            
+            <button onclick="closeBarcodeTicketModal()" class="absolute top-4 left-4 w-8 h-8 rounded-xl bg-[#0E1B2B] text-slate-300 flex items-center justify-center border border-[#1f3857]">
+                <span data-icon="close" data-size="14"></span>
+            </button>
+
+            <div class="text-center space-y-1 mb-4">
+                <div class="w-12 h-12 rounded-2xl bg-[#00B574]/20 border border-[#00B574]/40 text-[#00B574] flex items-center justify-center mx-auto text-xl mb-1">
+                    <span data-icon="shield" data-size="24"></span>
+                </div>
+                <h2 class="text-lg sm:text-xl font-black text-white">تم إنشاء الباركود المشفر لطلبك!</h2>
+                <p class="text-[11px] sm:text-xs text-slate-300">أرسله الآن إلى واتساب المتجر لتأكيد الدفع والتوصيل فوراً.</p>
+            </div>
+
+            <!-- Digital Ticket Card -->
+            <div id="visualTicketContainer" class="bg-white text-slate-900 rounded-2xl p-4 shadow border-2 border-dashed border-[#1DA1B9] space-y-3">
+                <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+                    <div class="flex items-center gap-2">
+                        <img src="assets/images/logo.svg" alt="ميم" class="w-7 h-7 rounded-lg">
+                        <div>
+                            <div class="font-black text-xs text-[#0E1B2B]">متجر ميم للإلكترونيات</div>
+                            <div class="text-[9px] text-slate-500">تذكرة طلب إلكتروني مشفرة</div>
+                        </div>
+                    </div>
+                    <div class="text-left font-mono">
+                        <div id="ticketOrderId" class="font-black text-xs text-[#3B6FE0]">MEEM-000000</div>
+                        <div id="ticketOrderDate" class="text-[9px] text-slate-500"></div>
+                    </div>
+                </div>
+
+                <!-- 2D QR Code & 1D Barcode -->
+                <div class="flex flex-col items-center justify-center bg-slate-50 rounded-xl p-3 border border-slate-200">
+                    <div id="qrcodeContainer" class="p-2 bg-white rounded-xl shadow-sm border border-slate-200"></div>
+                    <svg id="barcode1DSvg" class="w-full max-w-[220px] h-10 mt-1"></svg>
+                </div>
+
+                <!-- Customer Summary -->
+                <div class="text-[11px] space-y-1 bg-slate-100 p-2.5 rounded-xl">
+                    <div class="flex justify-between">
+                        <span class="text-slate-500">المستلم:</span>
+                        <span id="ticketCustName" class="font-bold text-slate-900">-</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-500">الهاتف:</span>
+                        <span id="ticketCustPhone" class="font-bold text-slate-900" dir="ltr">-</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-500">العنوان:</span>
+                        <span id="ticketCustLocation" class="font-bold text-slate-900 truncate max-w-[200px]">-</span>
+                    </div>
+                    <div class="flex justify-between border-t border-slate-200 pt-1.5 mt-1 font-bold">
+                        <span class="text-slate-700">الإجمالي:</span>
+                        <span id="ticketTotalAmount" class="text-sm font-black text-[#00B574]">0 ر.س</span>
+                    </div>
+                </div>
+
+                <!-- Encrypted String -->
+                <div class="bg-[#0E1B2B] text-teal-300 p-2 rounded-xl text-[9px] font-mono break-all line-clamp-2" id="encryptedCipherText" dir="ltr"></div>
+            </div>
+
+            <!-- WhatsApp CTA Button -->
+            <div class="mt-4 space-y-2">
+                <button 
+                    onclick="sendOrderToWhatsApp()"
+                    class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-[#00B574] to-[#1DA1B9] hover:from-[#009b63] hover:to-[#17879b] text-white font-black text-xs sm:text-sm shadow-xl shadow-[#00B574]/30 flex items-center justify-center gap-2 transition"
+                >
+                    <span data-icon="whatsapp" data-size="18"></span>
+                    <span>إرسال الباركود والطلب إلى واتساب المتجر لتأكيد الدفع</span>
+                </button>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="downloadTicketImage()" class="py-2.5 px-3 rounded-xl bg-[#0E1B2B] text-[#1DA1B9] border border-[#1f3857] font-bold text-xs flex items-center justify-center gap-1.5">
+                        <span data-icon="download" data-size="14"></span>
+                        <span>تحميل البطاقة (PNG)</span>
+                    </button>
+                    <button onclick="copyEncryptedCode()" class="py-2.5 px-3 rounded-xl bg-[#0E1B2B] text-slate-300 border border-[#1f3857] font-bold text-xs flex items-center justify-center gap-1.5">
+                        <span data-icon="copy" data-size="14"></span>
+                        <span>نسخ الكود</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Floating Sticky Cart Bar (Mobile Only) -->
+    <div id="mobileCartFloatBar" class="mobile-cart-float-bar hidden" onclick="toggleCartDrawer(true)">
+        <div class="flex items-center gap-2.5">
+            <span class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center font-black text-xs" id="mobileFloatCount">0</span>
+            <div class="text-xs">
+                <div class="font-normal opacity-90">سلة المشتريات</div>
+                <div id="mobileFloatTotal" class="font-black text-sm">0 ر.س</div>
+            </div>
+        </div>
+        <div class="flex items-center gap-1.5 font-bold text-xs bg-white text-[#0E1B2B] px-3 py-1.5 rounded-xl shadow">
+            <span>إتمام الطلب</span>
+            <span data-icon="cart" data-size="14"></span>
+        </div>
+    </div>
+
+    <!-- Sticky Mobile Bottom Navigation Bar -->
+    <nav class="mobile-bottom-nav">
+        <div class="mobile-nav-item active" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+            <span data-icon="home" data-size="18"></span>
+            <span class="mt-0.5">الرئيسية</span>
+        </div>
+        <div class="mobile-nav-item" onclick="document.getElementById('categoryTabs').scrollIntoView({behavior:'smooth'})">
+            <span data-icon="layers" data-size="18"></span>
+            <span class="mt-0.5">التصنيفات</span>
+        </div>
+        <div class="mobile-nav-item relative" onclick="toggleCartDrawer(true)">
+            <span data-icon="cart" data-size="18"></span>
+            <span id="mobileBottomCartBadge" class="absolute top-1 right-5 bg-[#00B574] text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center">0</span>
+            <span class="mt-0.5">السلة</span>
+        </div>
+        <a href="admin.html" class="mobile-nav-item">
+            <span data-icon="lock" data-size="18"></span>
+            <span class="mt-0.5">الإدارة</span>
+        </a>
+    </nav>
+
+    <!-- Toast Notification -->
+    <div id="toastNotification" class="fixed bottom-20 md:bottom-5 right-5 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-[#132438] border border-[#1DA1B9]/50 text-white px-4 py-2.5 rounded-2xl shadow-2xl flex items-center gap-2.5">
+            <div id="toastIcon" class="w-7 h-7 rounded-xl bg-[#00B574]/20 text-[#00B574] flex items-center justify-center">
+                <span data-icon="check" data-size="14"></span>
+            </div>
+            <span id="toastMessage" class="text-xs font-bold">تمت العملية بنجاح</span>
+        </div>
+    </div>
+
+    <!-- Store Configuration & Engine -->
+    <script src="store-config.js"></script>
+
+    <!-- Storefront Client Logic -->
+    <script>
+        let cart = JSON.parse(localStorage.getItem('MEEM_CART') || '[]');
+        let activeCategory = 'all';
+        let searchQuery = '';
+        let selectedProductForModal = null;
+        let modalQty = 1;
+        let lastGeneratedOrder = null;
+        let acquiredGpsLocation = '';
+
+        /* =========================================================================
+         * Theme Management (Light / Dark)
+         * ========================================================================= */
+        function handleToggleTheme() {
+            const next = toggleTheme();
+            updateThemeUI(next);
+        }
+
+        function updateThemeUI(theme) {
+            const isDark = theme === 'dark';
+            const iconEl = document.getElementById('themeSwitchIcon');
+            if (iconEl) {
+                iconEl.setAttribute('data-icon', isDark ? 'moon' : 'sun');
+            }
+            const handleEl = document.getElementById('themeSwitchHandle');
+            if (handleEl) {
+                handleEl.style.transform = isDark ? 'translateX(0px)' : 'translateX(-28px)';
+            }
+            renderAllIcons();
+        }
+
+        /* =========================================================================
+         * Hero Carousel Logic (Auto-slider every 5 seconds)
+         * ========================================================================= */
+        let currentSlideIndex = 0;
+        let carouselInterval = null;
+        let carouselProgressTimer = null;
+        let carouselPaused = false;
+        let progressPercent = 0;
+        const SLIDE_DURATION_MS = 5000;
+
+        let _storefrontProducts = [];
+        let _storefrontSlides = [];
+
+        function getCatalogProducts() {
+            return (_storefrontProducts && _storefrontProducts.length > 0) ? _storefrontProducts : getAllProducts();
+        }
+
+        function getCatalogSlides() {
+            return (_storefrontSlides && _storefrontSlides.length > 0) ? _storefrontSlides : getCarouselSlides();
+        }
+
+        async function syncStorefrontWithMySQL() {
+            try {
+                const [prods, slides] = await Promise.all([
+                    MeemAPI.getProducts('all'),
+                    MeemAPI.getCarouselSlides()
+                ]);
+                if (Array.isArray(prods) && prods.length > 0) {
+                    _storefrontProducts = prods;
+                }
+                if (Array.isArray(slides) && slides.length > 0) {
+                    _storefrontSlides = slides;
+                }
+                renderProducts();
+                renderHeroCarousel();
+
+                const badge = document.getElementById('storefrontDbBadge');
+                if (typeof isGitHubPages === 'function' && isGitHubPages()) {
+                    if (badge) {
+                        badge.classList.remove('hidden');
+                        badge.classList.add('flex');
+                        badge.innerHTML = '<span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span><span>سحابي GitHub Pages</span>';
+                        badge.className = "flex items-center gap-1.5 bg-blue-500/10 border border-blue-400/40 rounded-xl px-2.5 sm:px-3 py-1.5 sm:py-2 text-[11px] sm:text-xs font-black text-blue-600 dark:text-blue-400";
+                    }
+                    return;
+                }
+
+                const isConnected = await MeemAPI.isConnected();
+                if (badge && isConnected) {
+                    badge.classList.remove('hidden');
+                    badge.classList.add('flex');
+                }
+            } catch (err) {
+                console.warn('[MeemStore] MySQL sync error, using local fallback:', err);
+            }
+        }
+
+        function renderHeroCarousel() {
+            const slides = getCatalogSlides();
+            const holder = document.getElementById('carouselSlidesHolder');
+            const dotsContainer = document.getElementById('carouselDots');
+
+            if (!slides || slides.length === 0) return;
+
+            holder.innerHTML = slides.map((slide, idx) => {
+                const hasBgImage = Boolean(slide.bgImage);
+                return `
+                <div class="carousel-slide ${idx === 0 ? 'active' : ''} w-full relative overflow-hidden" data-index="${idx}">
+                    ${hasBgImage ? `
+                        <!-- Picture Background Layer -->
+                        <div 
+                            class="carousel-slide-bg absolute inset-0 bg-cover bg-center pointer-events-none" 
+                            style="background-image: url('${slide.bgImage}');"
+                        ></div>
+                        <!-- Adaptive High-Contrast Frosted Overlay -->
+                        <div class="carousel-bg-overlay absolute inset-0 pointer-events-none"></div>
+                    ` : ''}
+
+                    <div class="relative z-10 p-4 sm:p-8">
+                        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                            <div class="md:col-span-8 space-y-2 sm:space-y-3 text-center md:text-right">
+                                <span class="inline-block text-[10px] sm:text-xs font-black px-2.5 py-0.5 rounded-full text-white shadow" style="background-color: ${slide.badgeColor || '#00B574'}">
+                                    ${slide.badge || 'مميز'}
+                                </span>
+                                <h2 class="text-lg sm:text-3xl font-black text-slate-900 dark:text-white leading-tight">
+                                    ${slide.title}
+                                </h2>
+                                <p class="text-slate-600 dark:text-slate-300 text-xs sm:text-sm line-clamp-2 leading-relaxed">
+                                    ${slide.subtitle}
+                                </p>
+                                <div class="pt-1">
+                                    <button onclick="selectCategory('${slide.buttonCategory || 'all'}')" class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#00B574] to-[#0891B2] hover:from-[#009b63] hover:to-[#0e7490] text-white font-bold text-xs sm:text-sm shadow-lg shadow-[#00B574]/25 transition active:scale-95 inline-flex items-center gap-1.5">
+                                        <span>${slide.buttonText || 'تصفح الآن'}</span>
+                                        <span data-icon="chevronLeft" data-size="12"></span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="md:col-span-4 flex items-center justify-center">
+                                <div class="w-32 h-32 sm:w-44 sm:h-44 rounded-2xl bg-white/90 dark:bg-[#0E1B2B] p-3 border border-slate-200 dark:border-[#1f3857] shadow-xl backdrop-blur-md flex items-center justify-center">
+                                    <img src="${slide.image || './assets/images/placeholder.svg'}" alt="${slide.title}" class="max-w-full max-h-full object-contain">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `}).join('');
+
+            dotsContainer.innerHTML = slides.map((_, idx) => `
+                <div class="carousel-dot ${idx === 0 ? 'active' : ''}" onclick="goToSlide(${idx})"></div>
+            `).join('');
+
+            currentSlideIndex = 0;
+            startCarouselTimer();
+            renderAllIcons();
+        }
+
+        function showSlide(index) {
+            const slides = document.querySelectorAll('.carousel-slide');
+            const dots = document.querySelectorAll('.carousel-dot');
+            if (slides.length === 0) return;
+
+            if (index >= slides.length) index = 0;
+            if (index < 0) index = slides.length - 1;
+            currentSlideIndex = index;
+
+            slides.forEach((s, idx) => {
+                s.classList.toggle('active', idx === index);
+            });
+            dots.forEach((d, idx) => {
+                d.classList.toggle('active', idx === index);
+            });
+
+            resetProgressBar();
+        }
+
+        function nextSlide() {
+            showSlide(currentSlideIndex + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentSlideIndex - 1);
+        }
+
+        function goToSlide(index) {
+            showSlide(index);
+        }
+
+        function resetProgressBar() {
+            progressPercent = 0;
+            const bar = document.getElementById('carouselProgressBar');
+            if (bar) bar.style.width = '0%';
+        }
+
+        function startCarouselTimer() {
+            clearInterval(carouselProgressTimer);
+            resetProgressBar();
+
+            const intervalStepMs = 100;
+            const stepIncrement = (intervalStepMs / SLIDE_DURATION_MS) * 100;
+
+            carouselProgressTimer = setInterval(() => {
+                if (!carouselPaused) {
+                    progressPercent += stepIncrement;
+                    const bar = document.getElementById('carouselProgressBar');
+                    if (bar) bar.style.width = `${Math.min(progressPercent, 100)}%`;
+
+                    if (progressPercent >= 100) {
+                        nextSlide();
+                    }
+                }
+            }, intervalStepMs);
+        }
+
+        function pauseCarousel() {
+            carouselPaused = true;
+        }
+
+        function resumeCarousel() {
+            carouselPaused = false;
+        }
+
+        /* =========================================================================
+         * Categories & Products Catalog Rendering
+         * ========================================================================= */
+        function renderCategories() {
+            const container = document.getElementById('categoryTabs');
+            container.innerHTML = MEEM_CATEGORIES.map(cat => {
+                const isActive = cat.id === activeCategory;
+                return `
+                    <button 
+                        onclick="selectCategory('${cat.id}')"
+                        class="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition ${
+                            isActive 
+                            ? 'bg-[#3B6FE0] text-white shadow-md shadow-[#3B6FE0]/30 border border-[#3B6FE0]' 
+                            : 'bg-[#132438] text-slate-300 hover:bg-[#182e47] border border-[#1f3857]'
+                        }"
+                    >
+                        <span data-icon="${cat.icon}" data-size="14" class="${isActive ? 'text-white' : 'text-[#1DA1B9]'}"></span>
+                        <span>${cat.name}</span>
+                    </button>
+                `;
+            }).join('');
+            renderAllIcons();
+        }
+
+        function renderProducts() {
+            const grid = document.getElementById('productsGrid');
+            const emptyState = document.getElementById('emptyProductsState');
+            const products = getCatalogProducts();
+
+            const filtered = products.filter(p => {
+                const matchesCat = activeCategory === 'all' || p.category === activeCategory;
+                const matchesSearch = 
+                    p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    (p.shortDesc && p.shortDesc.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                    p.id.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchesCat && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            grid.innerHTML = filtered.map(product => {
+                const inCart = cart.find(item => item.id === product.id);
+                const qtyInCart = inCart ? inCart.qty : 0;
+                const imagesCount = (product.images && product.images.length) ? product.images.length : 1;
+                const imgSrc = (product.images && product.images[0]) ? product.images[0] : './assets/images/placeholder.svg';
+
+                return `
+                    <div class="glass-card rounded-2xl overflow-hidden flex flex-col justify-between border border-[#1f3857] group">
+                        <div>
+                            <div class="relative h-32 sm:h-44 bg-[#0E1B2B] overflow-hidden cursor-pointer" onclick="openProductModal('${product.id}')">
+                                <img 
+                                    src="${imgSrc}" 
+                                    alt="${product.name}"
+                                    loading="lazy"
+                                    onerror="this.src='./assets/images/placeholder.svg'"
+                                    class="w-full h-full object-contain p-2 group-hover:scale-105 transition duration-300"
+                                >
+                                <span class="absolute top-2 right-2 text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-lg bg-[#00B574]/90 text-white shadow">
+                                    ${product.badge || 'متوفر'}
+                                </span>
+                                
+                                ${imagesCount > 1 ? `
+                                    <span class="absolute top-2 left-2 text-[9px] font-bold px-1.5 py-0.5 rounded-lg bg-[#0E1B2B]/90 text-teal-300 border border-[#1f3857] flex items-center gap-1 shadow">
+                                        <span data-icon="images" data-size="10"></span>
+                                        <span>${imagesCount} صور</span>
+                                    </span>
+                                ` : ''}
+
+                                <span class="absolute bottom-1.5 left-2 font-mono text-[9px] text-teal-300 bg-[#0E1B2B]/90 px-1.5 py-0.5 rounded border border-[#1f3857]">
+                                    #${product.id}
+                                </span>
+                            </div>
+
+                            <div class="p-2.5 sm:p-4">
+                                <h3 
+                                    onclick="openProductModal('${product.id}')"
+                                    class="font-bold text-white text-xs sm:text-sm line-clamp-2 mb-1 cursor-pointer hover:text-[#1DA1B9] transition min-h-[32px]" 
+                                    title="${product.name}"
+                                >
+                                    ${product.name}
+                                </h3>
+                                <p class="text-[10px] sm:text-xs text-slate-400 line-clamp-1 leading-relaxed">
+                                    ${product.shortDesc || ''}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="p-2.5 sm:p-4 pt-1 sm:pt-2 border-t border-[#1f3857]/70 flex items-center justify-between gap-1 sm:gap-2">
+                            <div>
+                                <span class="text-[9px] text-slate-400 block sm:hidden">السعر</span>
+                                <span class="text-xs sm:text-base font-black text-[#00B574]">
+                                    ${product.price.toLocaleString()} <small class="text-[9px] sm:text-xs font-bold">ر.س</small>
+                                </span>
+                            </div>
+
+                            <div class="flex items-center gap-1">
+                                <button 
+                                    onclick="addToCart('${product.id}')"
+                                    class="py-1.5 px-2.5 sm:py-2 sm:px-3 rounded-xl font-bold text-[10px] sm:text-xs flex items-center gap-1 transition active:scale-95 ${
+                                        qtyInCart > 0 
+                                        ? 'bg-[#00B574]/20 text-[#00B574] border border-[#00B574]/40 hover:bg-[#00B574] hover:text-white' 
+                                        : 'bg-[#3B6FE0] hover:bg-[#2b5dc9] text-white shadow'
+                                    }"
+                                >
+                                    <span data-icon="${qtyInCart > 0 ? 'check' : 'cart-plus'}" data-size="12"></span>
+                                    <span>${qtyInCart > 0 ? qtyInCart : 'شراء'}</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            renderAllIcons();
+        }
+
+        function selectCategory(catId) {
+            activeCategory = catId;
+            renderCategories();
+            renderProducts();
+            document.getElementById('productsGrid').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function handleSearch(val) {
+            searchQuery = val;
+            renderProducts();
+        }
+
+        function resetFilters() {
+            activeCategory = 'all';
+            searchQuery = '';
+            document.getElementById('searchInputDesktop').value = '';
+            document.getElementById('searchInputMobile').value = '';
+            renderCategories();
+            renderProducts();
+        }
+
+        /* =========================================================================
+         * Product Quick View Modal & Multi-Image Switcher
+         * ========================================================================= */
+        function openProductModal(productId) {
+            const product = getCatalogProducts().find(p => p.id === productId);
+            if (!product) return;
+
+            selectedProductForModal = product;
+            modalQty = 1;
+
+            const images = (product.images && product.images.length > 0) ? product.images : ['./assets/images/placeholder.svg'];
+            const mainImg = document.getElementById('modalMainImg');
+            mainImg.src = images[0];
+
+            document.getElementById('modalBadge').textContent = product.badge || 'متوفر';
+            document.getElementById('modalSku').textContent = '#' + product.id;
+            document.getElementById('modalTitle').textContent = product.name;
+            document.getElementById('modalPrice').textContent = product.price.toLocaleString();
+            document.getElementById('modalDesc').textContent = product.fullDesc || product.shortDesc || '';
+            document.getElementById('modalQtyDisplay').textContent = modalQty;
+
+            const cat = MEEM_CATEGORIES.find(c => c.id === product.category);
+            document.getElementById('modalCategoryName').textContent = cat ? cat.name : 'إلكترونيات';
+
+            const stockEl = document.getElementById('modalStockStatus');
+            stockEl.textContent = `متوفر بالمخزن (${product.stock} قطعة)`;
+            stockEl.className = 'text-[10px] px-2 py-0.5 rounded-full font-bold bg-[#00B574]/20 text-[#00B574] border border-[#00B574]/30';
+
+            // Render Thumbnails Strip
+            const thumbStrip = document.getElementById('modalThumbnailsStrip');
+            thumbStrip.innerHTML = images.map((imgSrc, idx) => `
+                <div class="thumbnail-item ${idx === 0 ? 'active' : ''}" onclick="switchModalActiveImage('${imgSrc}', this)">
+                    <img src="${imgSrc}" alt="${product.name}" class="w-full h-full object-contain p-1 bg-[#0E1B2B]">
+                </div>
+            `).join('');
+
+            const specsContainer = document.getElementById('modalSpecsTable');
+            if (product.specs && Object.keys(product.specs).length > 0) {
+                specsContainer.innerHTML = Object.entries(product.specs).map(([key, val]) => `
+                    <div class="flex items-center justify-between py-0.5 border-b border-[#1f3857]/60 text-[11px]">
+                        <span class="text-slate-400 font-semibold">${key}:</span>
+                        <span class="text-white font-mono font-bold">${val}</span>
+                    </div>
+                `).join('');
+            } else {
+                specsContainer.innerHTML = '<span class="text-slate-500 text-[11px]">لا توجد مواصفات إضافية</span>';
+            }
+
+            document.getElementById('productDetailModal').classList.remove('hidden');
+            renderAllIcons();
+        }
+
+        function switchModalActiveImage(imgSrc, thumbEl) {
+            document.getElementById('modalMainImg').src = imgSrc;
+            document.querySelectorAll('.thumbnail-item').forEach(el => el.classList.remove('active'));
+            if (thumbEl) thumbEl.classList.add('active');
+        }
+
+        function closeProductModal() {
+            document.getElementById('productDetailModal').classList.add('hidden');
+            selectedProductForModal = null;
+        }
+
+        function changeModalQty(delta) {
+            modalQty += delta;
+            if (modalQty < 1) modalQty = 1;
+            document.getElementById('modalQtyDisplay').textContent = modalQty;
+        }
+
+        function addModalProductToCart() {
+            if (!selectedProductForModal) return;
+            for (let i = 0; i < modalQty; i++) {
+                addToCart(selectedProductForModal.id, false);
+            }
+            showToast(`تمت إضافة ${modalQty} من "${selectedProductForModal.name}" إلى السلة`);
+            closeProductModal();
+        }
+
+        /* =========================================================================
+         * Shopping Cart Management
+         * ========================================================================= */
+        function saveCart() {
+            storageSet('MEEM_CART', JSON.stringify(cart));
+        }
+
+        function addToCart(productId, showNotification = true) {
+            const product = getCatalogProducts().find(p => p.id === productId);
+            if (!product) return;
+
+            const existing = cart.find(item => item.id === productId);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image: (product.images && product.images[0]) ? product.images[0] : './assets/images/placeholder.svg',
+                    qty: 1
+                });
+            }
+
+            saveCart();
+            updateCartUI();
+            renderProducts();
+            if (showNotification) {
+                showToast(`تمت إضافة "${product.name}" للسلة`);
+            }
+        }
+
+        function changeItemQty(productId, delta) {
+            const index = cart.findIndex(item => item.id === productId);
+            if (index === -1) return;
+
+            cart[index].qty += delta;
+            if (cart[index].qty <= 0) {
+                cart.splice(index, 1);
+            }
+
+            saveCart();
+            updateCartUI();
+            renderProducts();
+        }
+
+        function clearCart() {
+            cart = [];
+            saveCart();
+            updateCartUI();
+            renderProducts();
+            showToast('تم إفراغ سلة المشتريات');
+        }
+
+        function getCartTotal() {
+            return cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+        }
+
+        function getCartCount() {
+            return cart.reduce((sum, item) => sum + item.qty, 0);
+        }
+
+        function updateCartUI() {
+            const count = getCartCount();
+            const total = getCartTotal();
+
+            document.getElementById('cartCountBadge').textContent = count;
+            document.getElementById('headerCartTotal').textContent = `${total.toLocaleString()} ر.س`;
+            document.getElementById('drawerItemCount').textContent = count;
+            document.getElementById('drawerCartTotal').textContent = `${total.toLocaleString()} ر.س`;
+
+            // Mobile Floating Bar & Bottom Badge
+            document.getElementById('mobileBottomCartBadge').textContent = count;
+            const floatBar = document.getElementById('mobileCartFloatBar');
+            if (count > 0) {
+                floatBar.classList.remove('hidden');
+                document.getElementById('mobileFloatCount').textContent = count;
+                document.getElementById('mobileFloatTotal').textContent = `${total.toLocaleString()} ر.س`;
+            } else {
+                floatBar.classList.add('hidden');
+            }
+
+            const clearBtn = document.getElementById('clearCartBtn');
+            const confirmBtn = document.getElementById('confirmOrderBtn');
+            const container = document.getElementById('cartItemsContainer');
+
+            if (cart.length === 0) {
+                clearBtn.classList.add('hidden');
+                confirmBtn.disabled = true;
+                confirmBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                container.innerHTML = `
+                    <div class="text-center py-8 bg-[#132438]/60 rounded-2xl border border-[#1f3857]">
+                        <span data-icon="cart" data-size="28" class="text-slate-500 mb-1 mx-auto block"></span>
+                        <p class="text-xs font-bold text-slate-300">سلة المشتريات فارغة</p>
+                    </div>
+                `;
+                renderAllIcons();
+                return;
+            }
+
+            clearBtn.classList.remove('hidden');
+            confirmBtn.disabled = false;
+            confirmBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+
+            container.innerHTML = cart.map(item => `
+                <div class="flex items-center justify-between gap-2.5 bg-slate-50 dark:bg-[#132438] p-2.5 rounded-xl border border-slate-200 dark:border-[#1f3857]">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <img src="${item.image}" alt="${item.name}" onerror="this.src='./assets/images/placeholder.svg'" class="w-10 h-10 rounded-lg object-contain bg-white dark:bg-[#0E1B2B] p-1 border border-slate-200 dark:border-[#1f3857] shrink-0">
+                        <div class="min-w-0">
+                            <h4 class="text-xs font-bold text-slate-800 dark:text-white truncate">${item.name}</h4>
+                            <div class="text-[11px] text-[#00B574] font-bold">
+                                ${(item.price * item.qty).toLocaleString()} ر.س
+                                <span class="text-[9px] text-slate-500 dark:text-slate-400">(${item.price} × ${item.qty})</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="qty-stepper flex items-center gap-1 bg-white dark:bg-[#0E1B2B] p-1 rounded-xl border border-slate-300 dark:border-[#1f3857] shadow-sm shrink-0">
+                        <button type="button" onclick="changeItemQty('${item.id}', 1)" class="qty-btn qty-btn-plus w-7 h-7 rounded-lg bg-emerald-50 hover:bg-emerald-500 hover:text-white text-emerald-700 dark:bg-[#182e47] dark:text-emerald-400 dark:hover:bg-emerald-600 dark:hover:text-white flex items-center justify-center border border-emerald-200 dark:border-emerald-700/50 shadow-sm transition" title="زيادة الكمية">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        </button>
+                        <span class="qty-display w-6 text-center text-xs font-black text-slate-900 dark:text-white">${item.qty}</span>
+                        <button type="button" onclick="changeItemQty('${item.id}', -1)" class="qty-btn qty-btn-minus w-7 h-7 rounded-lg bg-rose-50 hover:bg-rose-500 hover:text-white text-rose-700 dark:bg-[#182e47] dark:text-rose-400 dark:hover:bg-rose-600 dark:hover:text-white flex items-center justify-center border border-rose-200 dark:border-rose-700/50 shadow-sm transition" title="${item.qty === 1 ? 'حذف من السلة' : 'تقليل الكمية'}">
+                            ${item.qty === 1 ? 
+                                `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>` : 
+                                `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>`
+                            }
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            renderAllIcons();
+        }
+
+        function toggleCartDrawer(open) {
+            const backdrop = document.getElementById('cartDrawerBackdrop');
+            if (open) {
+                updateCartUI();
+                backdrop.classList.remove('hidden');
+            } else {
+                backdrop.classList.add('hidden');
+            }
+        }
+
+        function acquireGPSLocation() {
+            const btn = document.getElementById('gpsLocateBtn');
+            const statusBox = document.getElementById('gpsStatusContainer');
+            const mapLink = document.getElementById('gpsMapLink');
+            const locInput = document.getElementById('custLocation');
+
+            if (!navigator.geolocation) {
+                showToast('متصفحك لا يدعم تحديد الموقع', 'warning');
+                return;
+            }
+
+            btn.textContent = 'جاري التحديد...';
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    const lat = pos.coords.latitude.toFixed(6);
+                    const lng = pos.coords.longitude.toFixed(6);
+                    const googleMapsUrl = `https://maps.google.com/?q=${lat},${lng}`;
+                    acquiredGpsLocation = googleMapsUrl;
+
+                    btn.textContent = 'تم التحديد';
+                    statusBox.classList.remove('hidden');
+                    mapLink.href = googleMapsUrl;
+
+                    if (!locInput.value.includes('GPS')) {
+                        locInput.value = (locInput.value ? locInput.value + ' | ' : '') + `إحداثيات GPS: [${lat}, ${lng}]`;
+                    }
+                    showToast('تم التقاط موقعك الجغرافي بنجاح!');
+                },
+                (err) => {
+                    btn.textContent = 'موقعي GPS';
+                    showToast('يرجى تفعيل صلاحية الموقع أو كتابة العنوان يدوياً', 'warning');
+                },
+                { enableHighAccuracy: true, timeout: 8000 }
+            );
+        }
+
+        function handleOrderSubmit(e) {
+            e.preventDefault();
+            if (cart.length === 0) {
+                showToast('السلة فارغة!', 'warning');
+                return;
+            }
+
+            const name = document.getElementById('custName').value.trim();
+            const phone = document.getElementById('custPhone').value.trim();
+            const location = document.getElementById('custLocation').value.trim();
+            const notes = document.getElementById('custNotes').value.trim();
+
+            const randomId = Math.floor(100000 + Math.random() * 900000);
+            const orderId = `MEEM-${randomId}`;
+            const now = new Date();
+            const dateStr = now.toISOString().split('T')[0] + ' ' + now.toTimeString().slice(0, 5);
+
+            const orderObj = {
+                orderId,
+                timestamp: dateStr,
+                customer: { name, phone, address: location, gps: acquiredGpsLocation, notes },
+                items: [...cart],
+                total: getCartTotal(),
+                currency: 'ر.س'
+            };
+
+            const encryptedCode = encryptOrder(orderObj);
+            orderObj.encryptedCode = encryptedCode;
+            lastGeneratedOrder = orderObj;
+
+            document.getElementById('ticketOrderId').textContent = orderId;
+            document.getElementById('ticketOrderDate').textContent = dateStr;
+            document.getElementById('ticketCustName').textContent = name;
+            document.getElementById('ticketCustPhone').textContent = phone;
+            document.getElementById('ticketCustLocation').textContent = location;
+            document.getElementById('ticketTotalAmount').textContent = `${orderObj.total.toLocaleString()} ر.س`;
+            document.getElementById('encryptedCipherText').textContent = encryptedCode;
+
+            // Generate Local 2D QR Code
+            const qrContainer = document.getElementById('qrcodeContainer');
+            qrContainer.innerHTML = '';
+            try {
+                new QRCode(qrContainer, {
+                    text: encryptedCode,
+                    width: 160,
+                    height: 160,
+                    colorDark: "#0E1B2B",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.L
+                });
+            } catch (qrErr) {
+                console.warn("QR Code generation fallback:", qrErr);
+                try {
+                    new QRCode(qrContainer, {
+                        text: `MEEM-ORD::${orderId}::${orderObj.total}::${encodeURIComponent(name)}`,
+                        width: 160,
+                        height: 160,
+                        colorDark: "#0E1B2B",
+                        colorLight: "#ffffff",
+                        correctLevel: QRCode.CorrectLevel.L
+                    });
+                } catch (fallbackErr) {
+                    qrContainer.innerHTML = '<div class="text-xs text-rose-500 p-2 text-center font-bold">تعذر توليد الرمز الشريطي</div>';
+                }
+            }
+
+            // Generate Local 1D Barcode
+            try {
+                JsBarcode("#barcode1DSvg", orderId, {
+                    lineColor: "#0E1B2B",
+                    width: 1.8,
+                    height: 32,
+                    displayValue: true,
+                    fontSize: 10
+                });
+            } catch (err) {
+                console.warn(err);
+            }
+
+            toggleCartDrawer(false);
+            document.getElementById('barcodeTicketModal').classList.remove('hidden');
+        }
+
+        function closeBarcodeTicketModal() {
+            document.getElementById('barcodeTicketModal').classList.add('hidden');
+        }
+
+        function sendOrderToWhatsApp() {
+            if (!lastGeneratedOrder) return;
+            const o = lastGeneratedOrder;
+
+            const itemsText = o.items.map((item, idx) => 
+                `${idx + 1}. *${item.name}* (#${item.id})\n   الكمية: ${item.qty} × ${item.price} = *${(item.qty * item.price).toLocaleString()} ر.س*`
+            ).join('\n');
+
+            const message = 
+`مرحباً *متجر ميم للإلكترونيات* 👋
+أرغب بتأكيد طلبي للقطع الإلكترونية وهذه بيانات طلبي والباركود المشفر:
+
+🔖 *رقم الطلب:* ${o.orderId}
+📅 *التاريخ:* ${o.timestamp}
+━━━━━━━━━━━━━━━
+👤 *بيانات المستلم:*
+• الاسم: ${o.customer.name}
+• الجوال: ${o.customer.phone}
+• العنوان والموقع: ${o.customer.address}${o.customer.gps ? `\n• خريطة GPS: ${o.customer.gps}` : ''}${o.customer.notes ? `\n• ملاحظات: ${o.customer.notes}` : ''}
+━━━━━━━━━━━━━━━
+⚡ *القطع المطلوبة:*
+${itemsText}
+
+💰 *الإجمالي المطلوب سداده:* *${o.total.toLocaleString()} ر.س*
+━━━━━━━━━━━━━━━
+🔐 *الرمز المشفر للطلب:*
+\`\`\`
+${o.encryptedCode}
+\`\`\`
+يرجى تزويدي ببيانات التحويل والسداد، شكراً لكم!`;
+
+            const phone = getStoreWhatsAppNumber().replace(/[^0-9]/g, '');
+            const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        function copyEncryptedCode() {
+            if (!lastGeneratedOrder) return;
+            const temp = document.createElement('textarea');
+            temp.value = lastGeneratedOrder.encryptedCode;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            showToast('تم نسخ الكود المشفر!');
+        }
+
+        function downloadTicketImage() {
+            if (!lastGeneratedOrder) return;
+            const o = lastGeneratedOrder;
+
+            const canvas = document.createElement('canvas');
+            canvas.width = 680;
+            canvas.height = 840;
+            const ctx = canvas.getContext('2d');
+
+            ctx.fillStyle = '#0E1B2B';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.roundRect(30, 30, 620, 780, 20);
+            ctx.fill();
+
+            const grad = ctx.createLinearGradient(30, 30, 650, 30);
+            grad.addColorStop(0, '#3B6FE0');
+            grad.addColorStop(0.5, '#1DA1B9');
+            grad.addColorStop(1, '#00B574');
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.roundRect(30, 30, 620, 95, [20, 20, 0, 0]);
+            ctx.fill();
+
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 26px Cairo, sans-serif';
+            ctx.textAlign = 'right';
+            ctx.fillText('متجر ميم للإلكترونيات', 620, 80);
+            ctx.font = '14px Cairo, sans-serif';
+            ctx.fillText(`تذكرة طلب إلكتروني مشفرة | ${o.orderId}`, 620, 110);
+
+            const qrImg = document.querySelector('#qrcodeContainer canvas');
+            if (qrImg) {
+                ctx.drawImage(qrImg, 240, 150, 200, 200);
+            }
+
+            ctx.fillStyle = '#0E1B2B';
+            ctx.font = 'bold 18px Cairo, sans-serif';
+            ctx.textAlign = 'right';
+            ctx.fillText(`العميل: ${o.customer.name}`, 610, 390);
+            ctx.font = '15px Cairo, sans-serif';
+            ctx.fillText(`الهاتف: ${o.customer.phone}`, 610, 420);
+            ctx.fillText(`الموقع: ${o.customer.address.slice(0, 45)}`, 610, 450);
+
+            ctx.fillStyle = '#334155';
+            let y = 495;
+            ctx.fillText('القطع المطلوبة:', 610, y);
+            y += 26;
+            o.items.slice(0, 4).forEach(item => {
+                ctx.fillText(`• ${item.name.slice(0, 38)} (الكمية: ${item.qty}) = ${(item.price * item.qty).toLocaleString()} ر.س`, 610, y);
+                y += 24;
+            });
+
+            ctx.fillStyle = '#ecfdf5';
+            ctx.beginPath();
+            ctx.roundRect(50, 670, 580, 55, 12);
+            ctx.fill();
+            ctx.fillStyle = '#00B574';
+            ctx.font = 'bold 22px Cairo, sans-serif';
+            ctx.fillText(`الإجمالي المطلوب سداده: ${o.total.toLocaleString()} ر.س`, 600, 706);
+
+            const link = document.createElement('a');
+            link.download = `${o.orderId}-Meem-Ticket.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            showToast('تم تحميل تذكرة الباركود!');
+        }
+
+        let toastTimer;
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toastNotification');
+            const msgEl = document.getElementById('toastMessage');
+            msgEl.textContent = message;
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 3000);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const currentTheme = getStoredTheme();
+            applyTheme(currentTheme);
+            updateThemeUI(currentTheme);
+            renderHeroCarousel();
+            renderCategories();
+            renderProducts();
+            updateCartUI();
+            renderAllIcons();
+            syncStorefrontWithMySQL();
+        });
+    </script>
+</body>
+</html>

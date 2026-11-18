@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="1200" height="600">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0E1B2B"/>
+      <stop offset="50%" stop-color="#132438"/>
+      <stop offset="100%" stop-color="#091421"/>
+    </linearGradient>
+    <linearGradient id="cyanLine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1DA1B9" stop-opacity="0.1"/>
+      <stop offset="50%" stop-color="#1DA1B9" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#00B574" stop-opacity="0.8"/>
+    </linearGradient>
+    <linearGradient id="emeraldLine" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00B574" stop-opacity="0.1"/>
+      <stop offset="50%" stop-color="#00B574" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#3B6FE0" stop-opacity="0.7"/>
+    </linearGradient>
+    <pattern id="pcbGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <circle cx="20" cy="20" r="1" fill="#1DA1B9" fill-opacity="0.15"/>
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1f3857" stroke-width="0.5" stroke-opacity="0.4"/>
+    </pattern>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="1200" height="600" fill="url(#bgGrad)"/>
+  <rect width="1200" height="600" fill="url(#pcbGrid)"/>
+
+  <!-- Electronic Circuit Traces -->
+  <g fill="none" stroke="url(#cyanLine)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 100,500 L 250,500 L 350,400 L 600,400 L 700,500 L 1050,500" />
+    <path d="M 200,100 L 400,100 L 500,200 L 800,200 L 900,100 L 1150,100" />
+    <path d="M 50,300 L 200,300 L 300,200 L 450,200 L 550,300 L 750,300 L 850,200 L 1100,200" />
+    <path d="M 300,550 L 450,550 L 550,450 L 850,450 L 950,550 L 1180,550" />
+    <path d="M 150,50 L 280,50 L 380,150 L 620,150 L 720,50 L 980,50" stroke-dasharray="8,6" />
+  </g>
+
+  <g fill="none" stroke="url(#emeraldLine)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 80,420 L 220,420 L 320,320 L 520,320 L 620,420 L 920,420 L 1020,320 L 1140,320" />
+    <path d="M 350,50 L 500,50 L 600,150 L 820,150 L 920,250 L 1120,250" />
+    <path d="M 0,220 L 150,220 L 250,120 L 420,120 L 520,220 L 700,220" />
+  </g>
+
+  <!-- Glowing Nodes / Solder Pads -->
+  <g fill="#00B574">
+    <circle cx="350" cy="400" r="5" />
+    <circle cx="600" cy="400" r="6" />
+    <circle cx="700" cy="500" r="5" />
+    <circle cx="500" cy="200" r="6" />
+    <circle cx="800" cy="200" r="5" />
+    <circle cx="300" cy="200" r="5" />
+    <circle cx="750" cy="300" r="6" />
+    <circle cx="550" cy="450" r="5" />
+  </g>
+
+  <g fill="#1DA1B9">
+    <circle cx="250" cy="500" r="4" />
+    <circle cx="400" cy="100" r="5" />
+    <circle cx="900" cy="100" r="4" />
+    <circle cx="550" cy="300" r="5" />
+    <circle cx="850" cy="200" r="4" />
+    <circle cx="320" cy="320" r="6" />
+    <circle cx="620" cy="420" r="5" />
+    <circle cx="1020" cy="320" r="6" />
+  </g>
+
+  <g fill="#3B6FE0">
+    <circle cx="600" cy="150" r="5" />
+    <circle cx="820" cy="150" r="5" />
+    <circle cx="920" cy="250" r="6" />
+  </g>
+
+  <!-- Central Microchip Silhouette -->
+  <g transform="translate(750, 150)" opacity="0.35">
+    <rect x="0" y="0" width="160" height="160" rx="16" fill="#0E1B2B" stroke="#1DA1B9" stroke-width="2"/>
+    <rect x="25" y="25" width="110" height="110" rx="8" fill="#132438" stroke="#00B574" stroke-width="1.5"/>
+    <circle cx="80" cy="80" r="22" fill="#00B574" fill-opacity="0.2" stroke="#00B574" stroke-width="1.5"/>
+    <!-- Chip Pins -->
+    <line x1="-12" y1="40" x2="0" y2="40" stroke="#1DA1B9" stroke-width="3"/>
+    <line x1="-12" y1="80" x2="0" y2="80" stroke="#1DA1B9" stroke-width="3"/>
+    <line x1="-12" y1="120" x2="0" y2="120" stroke="#1DA1B9" stroke-width="3"/>
+    <line x1="160" y1="40" x2="172" y2="40" stroke="#1DA1B9" stroke-width="3"/>
+    <line x1="160" y1="80" x2="172" y2="80" stroke="#1DA1B9" stroke-width="3"/>
+    <line x1="160" y1="120" x2="172" y2="120" stroke="#1DA1B9" stroke-width="3"/>
+    <line x1="40" y1="-12" x2="40" y2="0" stroke="#00B574" stroke-width="3"/>
+    <line x1="80" y1="-12" x2="80" y2="0" stroke="#00B574" stroke-width="3"/>
+    <line x1="120" y1="-12" x2="120" y2="0" stroke="#00B574" stroke-width="3"/>
+    <line x1="40" y1="160" x2="40" y2="172" stroke="#00B574" stroke-width="3"/>
+    <line x1="80" y1="160" x2="80" y2="172" stroke="#00B574" stroke-width="3"/>
+    <line x1="120" y1="160" x2="120" y2="172" stroke="#00B574" stroke-width="3"/>
+  </g>
+</svg>

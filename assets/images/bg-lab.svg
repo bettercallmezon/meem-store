@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="1200" height="600">
+  <defs>
+    <linearGradient id="labGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0E1B2B"/>
+      <stop offset="50%" stop-color="#162238"/>
+      <stop offset="100%" stop-color="#0c1726"/>
+    </linearGradient>
+    <radialGradient id="purpleGlow" cx="75%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#7C3AED" stop-opacity="0.35"/>
+      <stop offset="60%" stop-color="#3B6FE0" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#0E1B2B" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="600" fill="url(#labGrad)"/>
+  <rect width="1200" height="600" fill="url(#purpleGlow)"/>
+
+  <!-- Oscilloscope Sine & Pulse Wave -->
+  <g fill="none" stroke="#7C3AED" stroke-width="2.5" stroke-opacity="0.5" stroke-linecap="round">
+    <path d="M 50,300 Q 150,150 250,300 T 450,300 T 650,300 T 850,300 T 1050,300 T 1200,300"/>
+  </g>
+  <g fill="none" stroke="#1DA1B9" stroke-width="2" stroke-opacity="0.4" stroke-linecap="round">
+    <path d="M 50,300 L 200,300 L 200,200 L 350,200 L 350,400 L 500,400 L 500,300 L 700,300 L 700,180 L 850,180 L 850,380 L 1000,380 L 1000,300 L 1150,300"/>
+  </g>
+
+  <!-- Technical Measurement Reticle -->
+  <g transform="translate(800, 240)" stroke="#1DA1B9" stroke-opacity="0.3" fill="none">
+    <circle cx="0" cy="0" r="100" stroke-width="1.5" stroke-dasharray="4,6"/>
+    <circle cx="0" cy="0" r="60" stroke-width="1"/>
+    <line x1="-120" y1="0" x2="120" y2="0" stroke-width="1"/>
+    <line x1="0" y1="-120" x2="0" y2="120" stroke-width="1"/>
+  </g>
+</svg>

@@ -1,0 +1,822 @@
+/* ==========================================================================
+   Meem Electronics Store - Offline Standalone Stylesheet & Mobile Layout
+   Theme Colors (Light Palette Baseline with Dark Cyber Mode):
+   - Background Surface: #F8FAFC (Light) / #0E1B2B (Dark)
+   - Cards Surface: #FFFFFF (Light) / #132438 (Dark)
+   - Emerald Green: #00B574 (Primary Brand Accent)
+   - Cyber Teal: #0891B2 / #1DA1B9 (Secondary Accent)
+   - Royal Blue: #2563EB / #3B6FE0 (Action Accent)
+   - Electric Purple: #7C3AED (Tech Badge Accent)
+   ========================================================================== */
+
+:root {
+  --color-surface: #f8fafc;
+  --color-surface-card: #ffffff;
+  --color-surface-card-sub: #f1f5f9;
+  --color-surface-hover: #f1f5f9;
+  --color-border: #e2e8f0;
+  --color-border-subtle: #cbd5e1;
+  --color-emerald: #00B574;
+  --color-emerald-hover: #009b63;
+  --color-teal: #0891B2;
+  --color-blue: #2563EB;
+  --color-purple: #7C3AED;
+  --color-text-main: #0f172a;
+  --color-text-muted: #475569;
+  --color-text-subtle: #64748b;
+}
+
+/* Dark Mode CSS Variables */
+html.dark,
+body.theme-dark {
+  --color-surface: #0E1B2B;
+  --color-surface-card: #132438;
+  --color-surface-card-sub: #182e47;
+  --color-surface-hover: #1c3552;
+  --color-border: #1f3857;
+  --color-border-subtle: #2a4b73;
+  --color-emerald: #00B574;
+  --color-emerald-hover: #009b63;
+  --color-teal: #1DA1B9;
+  --color-blue: #3B6FE0;
+  --color-purple: #7C3AED;
+  --color-text-main: #f1f5f9;
+  --color-text-muted: #94a3b8;
+  --color-text-subtle: #64748b;
+}
+
+/* Local Fonts Fallback Stack */
+body {
+  font-family: 'Cairo', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: var(--color-surface);
+  color: var(--color-text-main);
+  overflow-x: hidden;
+  padding-bottom: 70px; /* Space for mobile bottom bar */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+@media (min-width: 768px) {
+  body {
+    padding-bottom: 0;
+  }
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+html.dark ::-webkit-scrollbar-track {
+  background: rgba(10, 19, 31, 0.4);
+}
+html.dark ::-webkit-scrollbar-thumb {
+  background: #1e3654;
+}
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: var(--color-teal);
+}
+
+/* ==========================================================================
+   Surfaces & Glassmorphism Panels
+   ========================================================================== */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+html.dark .glass-panel {
+  background: rgba(19, 36, 56, 0.92);
+  border: 1px solid rgba(29, 161, 185, 0.25);
+  box-shadow: none;
+}
+
+.glass-card {
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 4px 15px -3px rgba(15, 23, 42, 0.05);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html.dark .glass-card {
+  background: rgba(19, 36, 56, 0.95);
+  border: 1px solid var(--color-border);
+  box-shadow: none;
+}
+
+.glass-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--color-emerald);
+  box-shadow: 0 12px 25px -8px rgba(0, 181, 116, 0.22);
+}
+
+html.dark .glass-card:hover {
+  border-color: rgba(29, 161, 185, 0.5);
+  box-shadow: 0 12px 25px -10px rgba(0, 181, 116, 0.25);
+}
+
+/* ==========================================================================
+   Comprehensive Light Theme Overrides for Tailwind Classes
+   ========================================================================== */
+html.light,
+html:not(.dark),
+body.theme-light {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+/* Dark surfaces converted to bright white cards in Light Theme */
+html.light .bg-\[\#0E1B2B\],
+html.light .bg-\[\#132438\],
+html.light .bg-\[\#182e47\],
+html.light .bg-slate-900,
+html.light .bg-slate-950,
+html.light .bg-slate-900\/90,
+html.light .bg-slate-900\/95,
+html.light .bg-slate-900\/80,
+html.light .bg-slate-900\/50,
+html.light .bg-slate-800,
+html.light .bg-slate-800\/50,
+html.light .bg-slate-800\/80 {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* Soft gray image containers inside product cards */
+html.light .glass-card .bg-\[\#0E1B2B\],
+html.light .product-img-holder {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* Headers and Navbars in Light Theme */
+html.light header,
+html.light nav,
+html.light header.glass-panel {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05) !important;
+}
+
+/* Borders in Light Theme */
+html.light .border-\[\#1f3857\],
+html.light .border-\[\#1f3857\]\/70,
+html.light .border-\[\#1f3857\]\/50,
+html.light .border-\[\#1f3857\]\/40,
+html.light .border-slate-800,
+html.light .border-slate-700 {
+  border-color: #e2e8f0 !important;
+}
+
+/* Typography in Light Theme */
+html.light h1,
+html.light h2,
+html.light h3,
+html.light h4,
+html.light h5,
+html.light h6 {
+  color: #0f172a !important;
+}
+
+html.light .text-slate-100,
+html.light .text-slate-200,
+html.light .text-slate-300 {
+  color: #0f172a !important;
+}
+
+html.light .text-slate-400 {
+  color: #475569 !important;
+}
+
+html.light .text-slate-500 {
+  color: #64748b !important;
+}
+
+html.light .text-teal-300 {
+  color: #0891b2 !important;
+}
+
+/* Neutral text-white on headings/labels converted to dark slate */
+html.light h3.text-white,
+html.light h2.text-white,
+html.light h1.text-white,
+html.light span.text-white:not([class*="bg-"]):not([class*="from-"]):not([class*="badge"]),
+html.light div.text-white:not([class*="bg-"]):not([class*="from-"]):not([class*="btn"]),
+html.light p.text-white {
+  color: #0f172a !important;
+}
+
+/* Modals & Popups in Light Theme */
+html.light #cartModal .glass-panel,
+html.light #productDetailModal .glass-panel,
+html.light #productEditModal .glass-panel,
+html.light #slideEditModal .glass-panel,
+html.light #adminAuthModal .glass-panel,
+html.light #orderDetailModal .glass-panel,
+html.light #settingsModal .glass-panel,
+html.light #cartDrawer {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.18) !important;
+}
+
+/* Keep Modal Backdrop Semi-Transparent Dark */
+#cartModal,
+#productDetailModal,
+#productEditModal,
+#slideEditModal,
+#adminAuthModal,
+#orderDetailModal,
+#settingsModal {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Product Detail Modal Custom Scrollbars */
+#modalDesc::-webkit-scrollbar,
+#modalSpecsTable::-webkit-scrollbar {
+  width: 5px;
+}
+#modalDesc::-webkit-scrollbar-thumb,
+#modalSpecsTable::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+html.dark #modalDesc::-webkit-scrollbar-thumb,
+html.dark #modalSpecsTable::-webkit-scrollbar-thumb {
+  background: #1e3654;
+}
+
+/* Form Inputs, Selects, and Textareas in Light Theme */
+html.light input,
+html.light select,
+html.light textarea {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+html.light input::placeholder,
+html.light textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+html.light input:focus,
+html.light select:focus,
+html.light textarea:focus {
+  border-color: var(--color-emerald) !important;
+  box-shadow: 0 0 0 3px rgba(0, 181, 116, 0.2) !important;
+}
+
+/* ==========================================================================
+   Hero Carousel Styles (Modern Bright Gradient in Light Theme)
+   ========================================================================== */
+.carousel-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #f0fdf4 0%, #f0f9ff 50%, #faf5ff 100%);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.05);
+}
+
+html.dark .carousel-container {
+  background: rgba(19, 36, 56, 0.88);
+  border: 1px solid rgba(29, 161, 185, 0.25);
+  box-shadow: none;
+}
+
+.carousel-slide {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.carousel-slide.active {
+  display: block;
+  opacity: 1;
+}
+
+/* Picture Background Zoom Animation */
+.carousel-slide-bg {
+  transform: scale(1.0);
+  transition: transform 6s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform;
+}
+
+.carousel-slide.active .carousel-slide-bg {
+  transform: scale(1.06);
+}
+
+/* High-Contrast Adaptive Theme Overlays for Picture Background */
+html.light .carousel-bg-overlay,
+html:not(.dark) .carousel-bg-overlay {
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0.96) 0%, 
+    rgba(255, 255, 255, 0.92) 50%, 
+    rgba(255, 255, 255, 0.60) 100%
+  );
+}
+
+html.dark .carousel-bg-overlay {
+  background: linear-gradient(90deg, 
+    rgba(14, 27, 43, 0.96) 0%, 
+    rgba(14, 27, 43, 0.88) 50%, 
+    rgba(14, 27, 43, 0.55) 100%
+  );
+}
+
+@media (max-width: 767px) {
+  html.light .carousel-bg-overlay,
+  html:not(.dark) .carousel-bg-overlay {
+    background: linear-gradient(180deg, 
+      rgba(255, 255, 255, 0.96) 0%, 
+      rgba(255, 255, 255, 0.92) 60%, 
+      rgba(255, 255, 255, 0.70) 100%
+    );
+  }
+  html.dark .carousel-bg-overlay {
+    background: linear-gradient(180deg, 
+      rgba(14, 27, 43, 0.96) 0%, 
+      rgba(14, 27, 43, 0.90) 60%, 
+      rgba(14, 27, 43, 0.70) 100%
+    );
+  }
+}
+
+html.light .carousel-slide h2 {
+  color: #0f172a !important;
+}
+
+html.light .carousel-slide p {
+  color: #334155 !important;
+}
+
+html.light .carousel-slide .bg-\[\#0E1B2B\] {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.08) !important;
+}
+
+.carousel-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: #cbd5e1;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+html.dark .carousel-dot {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.carousel-dot.active {
+  width: 24px;
+  background: var(--color-emerald) !important;
+  box-shadow: 0 0 10px rgba(0, 181, 116, 0.45);
+}
+
+.carousel-progress-bar {
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-emerald), var(--color-teal));
+  width: 0%;
+  transition: width 0.1s linear;
+}
+
+/* ==========================================================================
+   Theme Slider Switcher (Light / Dark Mode)
+   ========================================================================== */
+.theme-switch-slider {
+  position: relative;
+  width: 56px;
+  height: 28px;
+  background: #e2e8f0;
+  border: 1px solid #cbd5e1;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  padding: 2px;
+  user-select: none;
+}
+
+html.dark .theme-switch-slider {
+  background: #132438;
+  border-color: #1f3857;
+}
+
+.theme-switch-handle {
+  width: 22px;
+  height: 22px;
+  border-radius: 9999px;
+  background: var(--color-emerald);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+  transform: translateX(-28px);
+}
+
+html.dark .theme-switch-handle {
+  transform: translateX(0px);
+  background: var(--color-blue);
+}
+
+/* ==========================================================================
+   Mobile Bottom Navigation Bar
+   ========================================================================== */
+.mobile-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 65px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--color-border);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 8px env(safe-area-inset-bottom);
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.05);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+html.dark .mobile-bottom-nav {
+  background: rgba(14, 27, 43, 0.96);
+  border-top: 1px solid var(--color-border);
+  box-shadow: none;
+}
+
+@media (min-width: 768px) {
+  .mobile-bottom-nav {
+    display: none !important;
+  }
+}
+
+.mobile-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  color: var(--color-text-muted);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 6px 0;
+  transition: all 0.2s;
+  cursor: pointer;
+  position: relative;
+}
+
+.mobile-nav-item:active,
+.mobile-nav-item.active {
+  color: var(--color-emerald);
+}
+
+html.dark .mobile-nav-item:active,
+html.dark .mobile-nav-item.active {
+  color: var(--color-teal);
+}
+
+.mobile-nav-item.active::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  width: 20px;
+  height: 3px;
+  background: var(--color-emerald);
+  border-radius: 2px;
+}
+
+html.dark .mobile-nav-item.active::after {
+  background: var(--color-teal);
+}
+
+/* Floating Sticky Cart Indicator on Mobile */
+.mobile-cart-float-bar {
+  position: fixed;
+  bottom: 75px;
+  left: 16px;
+  right: 16px;
+  background: linear-gradient(135deg, var(--color-blue), var(--color-emerald));
+  color: #ffffff;
+  border-radius: 16px;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 10px 25px rgba(0, 181, 116, 0.3);
+  z-index: 45;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+@media (min-width: 768px) {
+  .mobile-cart-float-bar {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   Multi-Image Thumbnail Gallery
+   ========================================================================== */
+.thumbnail-strip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 6px 2px;
+}
+
+.thumbnail-strip::-webkit-scrollbar {
+  height: 4px;
+}
+
+.thumbnail-item {
+  width: 54px;
+  height: 54px;
+  border-radius: 10px;
+  background: #f8fafc;
+  border: 2px solid var(--color-border);
+  overflow: hidden;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+html.dark .thumbnail-item {
+  background: #132438;
+}
+
+.thumbnail-item:hover,
+.thumbnail-item.active {
+  border-color: var(--color-emerald) !important;
+  box-shadow: 0 0 10px rgba(0, 181, 116, 0.3);
+}
+
+/* ==========================================================================
+   Admin Tables & Dashboard in Light Theme
+   ========================================================================== */
+html.light .metric-card {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.05) !important;
+}
+
+html.light table thead tr {
+  background: #f8fafc !important;
+}
+
+html.light table thead th {
+  color: #475569 !important;
+  border-bottom: 2px solid #e2e8f0 !important;
+}
+
+html.light table tbody tr {
+  background: #ffffff !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+}
+
+html.light table tbody tr:hover {
+  background: #f8fafc !important;
+}
+
+html.light table tbody td {
+  color: #0f172a !important;
+}
+
+/* Admin WhatsApp Banner in Light Theme */
+html.light #adminWhatsAppBanner {
+  background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%) !important;
+  border-color: #bbf7d0 !important;
+}
+
+html.light #adminWhatsAppBanner h3 {
+  color: #14532d !important;
+}
+
+html.light #adminWhatsAppBanner p {
+  color: #166534 !important;
+}
+
+/* ==========================================================================
+   Quantity Stepper (Cart Drawer & Product Detail Modal)
+   Ensures + and - buttons are prominently visible in both Light and Dark themes
+   ========================================================================== */
+.qty-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background-color: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 3px;
+  transition: all 0.2s ease;
+}
+
+html.dark .qty-stepper {
+  background-color: #0E1B2B;
+  border-color: #1f3857;
+}
+
+.qty-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background-color: #ffffff !important;
+  color: #1e293b !important;
+  border: 1px solid #cbd5e1 !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.qty-btn svg {
+  stroke: #1e293b !important;
+  width: 12px;
+  height: 12px;
+}
+
+.qty-btn:hover {
+  background-color: var(--color-emerald) !important;
+  border-color: var(--color-emerald) !important;
+  transform: scale(1.06);
+}
+
+.qty-btn:hover svg {
+  stroke: #ffffff !important;
+}
+
+.qty-btn-minus:hover {
+  background-color: #e11d48 !important;
+  border-color: #e11d48 !important;
+}
+
+.qty-btn-minus:hover svg {
+  stroke: #ffffff !important;
+}
+
+html.dark .qty-btn {
+  background-color: #182e47 !important;
+  color: #ffffff !important;
+  border-color: #1f3857 !important;
+  box-shadow: none;
+}
+
+html.dark .qty-btn svg {
+  stroke: #ffffff !important;
+}
+
+html.dark .qty-btn:hover {
+  background-color: var(--color-blue) !important;
+  border-color: var(--color-blue) !important;
+}
+
+html.dark .qty-btn-minus:hover {
+  background-color: #e11d48 !important;
+  border-color: #e11d48 !important;
+}
+
+.qty-display {
+  min-width: 24px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 13px;
+  color: #0f172a !important;
+}
+
+html.dark .qty-display {
+  color: #ffffff !important;
+}
+
+/* Fallback override for any cart buttons rendered inside #cartItemsContainer */
+html.light #cartItemsContainer button[onclick*="changeItemQty"],
+html.light #productDetailModal button[onclick*="changeModalQty"] {
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06) !important;
+}
+
+html.light #cartItemsContainer button[onclick*="changeItemQty"] svg,
+html.light #productDetailModal button[onclick*="changeModalQty"] svg {
+  stroke: #1e293b !important;
+}
+
+html.light #cartItemsContainer button[onclick*="changeItemQty"]:hover,
+html.light #productDetailModal button[onclick*="changeModalQty"]:hover {
+  background-color: #00B574 !important;
+  border-color: #00B574 !important;
+}
+
+html.light #cartItemsContainer button[onclick*="changeItemQty"]:hover svg,
+html.light #productDetailModal button[onclick*="changeModalQty"]:hover svg {
+  stroke: #ffffff !important;
+}
+
+html.light #cartItemsContainer button[onclick*="-1"]:hover {
+  background-color: #e11d48 !important;
+  border-color: #e11d48 !important;
+}
+
+html.light #cartItemsContainer .bg-\[\#0E1B2B\] {
+  background-color: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+}
+
+/* Buttons and Badges - Ensure White Text on Colored Backgrounds */
+html.light button[class*="bg-[#00B574]"],
+html.light button[class*="bg-[#3B6FE0]"],
+html.light button[class*="bg-[#7C3AED]"],
+html.light button[class*="bg-[#1DA1B9]"],
+html.light button[class*="from-[#00B574]"],
+html.light button[class*="from-[#3B6FE0]"],
+html.light button[class*="from-[#7C3AED]"],
+html.light a[class*="bg-[#00B574]"],
+html.light a[class*="bg-[#3B6FE0]"],
+html.light a[class*="from-"],
+html.light span[class*="bg-[#00B574]"],
+html.light span[class*="bg-[#3B6FE0]"],
+html.light span[class*="bg-[#7C3AED]"],
+html.light span[class*="bg-[#1DA1B9]"],
+html.light span[class*="bg-rose-"],
+html.light span[class*="bg-emerald-"],
+html.light span[class*="bg-blue-"],
+html.light span[class*="bg-purple-"] {
+  color: #ffffff !important;
+}
+
+/* Laser Scanner Animation */
+@keyframes laser-sweep {
+  0% { top: 0%; opacity: 0.8; }
+  50% { top: 95%; opacity: 1; }
+  100% { top: 0%; opacity: 0.8; }
+}
+
+.scanner-laser {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--color-emerald), var(--color-teal), transparent);
+  box-shadow: 0 0 15px var(--color-emerald), 0 0 8px var(--color-teal);
+  animation: laser-sweep 2.2s infinite ease-in-out;
+}
+
+/* Drag & Drop Highlight */
+.drag-over {
+  border-color: var(--color-emerald) !important;
+  background-color: rgba(0, 181, 116, 0.1) !important;
+}
+
+/* Print Styles for A4 Receipts */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 12pt;
+    padding-bottom: 0 !important;
+  }
+  
+  .no-print, header, footer, .mobile-bottom-nav, .mobile-cart-float-bar, #adminNavbar, #scanOptionsPanel, #orderHistorySection, #settingsSection, #adminProductsSection, #adminCarouselSection {
+    display: none !important;
+  }
+  
+  #printInvoiceArea {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}
